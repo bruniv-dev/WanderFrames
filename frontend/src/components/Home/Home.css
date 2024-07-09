@@ -1,11 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");
+
 .body {
   position: relative;
+  font-family: "Poppins", sans-serif;
 }
 
 .heading {
   position: absolute;
   top: 32%;
-  left: 24%;
+  left: 22%;
   z-index: 1;
   font-size: 5rem;
   color: white;
@@ -13,13 +16,14 @@
 }
 
 .sub-heading {
+  font-family: "Dancing Script", cursive;
   position: absolute;
   font-weight: 300;
   z-index: 1;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   color: antiquewhite;
   top: 47%;
-  left: 32%;
+  left: 30%;
   letter-spacing: 0.5px;
 }
 
@@ -41,6 +45,7 @@
   background-color: orange;
   padding: 0.5rem;
   border: none;
+  font-weight: 600;
 }
 
 .hero-buttons button:hover {

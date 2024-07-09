@@ -13,7 +13,7 @@ const Home = () => {
       </h4>
       <Carousel data={slides.slides} />
       <div className="hero-buttons">
-        <button className="hero-button-1">Get Inspired</button>
+        <button className="hero-button-1">Explore Inspirations</button>
         <button className="hero-button-2">Share Your Journey</button>
       </div>
     </div>
