@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./Header.css";
 
-const Header = () => {
+const Header = ({ classNameheader, classNamelogo, classNamenav }) => {
   const [activeLink, setActiveLink] = useState("home");
 
   const navLinks = [
     { name: "Home", id: "home", path: "/" },
+    { name: "Profile", id: "profile", path: "/profile" },
+    { name: "Upload", id: "upload", path: "/upload" },
     { name: "Inspirations", id: "inspirations", path: "/inspirations" },
     { name: "Favorites", id: "favorites", path: "/favorites" },
   ];
@@ -18,9 +20,9 @@ const Header = () => {
   console.log(activeLink);
 
   return (
-    <div className="header">
-      <h2 className="logo">BRUNIV</h2>
-      <nav className="nav">
+    <div className={`header ${classNameheader}`}>
+      <h2 className={`logo ${classNamelogo}`}>BRUNIV</h2>
+      <nav className={`nav ${classNamenav}`}>
         {navLinks.map((link) => (
           <NavLink
             key={link.id}

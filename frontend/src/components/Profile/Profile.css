@@ -1,0 +1,20 @@
+.profile-container {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100vh;
+}
+
+.profile-header {
+  background-color: white;
+  border-bottom: 1px solid gray;
+}
+
+.profile-logo {
+  color: #111;
+}
+
+.profile-nav a {
+  color: black;
+}

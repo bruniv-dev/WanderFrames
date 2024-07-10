@@ -1,0 +1,20 @@
+.inspirations-container {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100vh;
+}
+
+.inspirations-header {
+  background-color: white;
+  border-bottom: 1px solid rgb(226, 223, 223);
+}
+
+.inspirations-logo {
+  color: black;
+}
+
+.inspirations-nav a {
+  color: black;
+}
