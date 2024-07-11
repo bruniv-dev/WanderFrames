@@ -37,15 +37,15 @@ export const getPostById = async (req, res) => {
 
 //post a post
 export const addPost = async (req, res, next) => {
-  const { title, description, image, location, date, user } = req.body;
+  const { subLocation, description, images, location, date, user } = req.body;
 
   if (
-    !title &&
-    title.trim() === "" &&
+    !subLocation &&
+    subLocation.trim() === "" &&
     !description &&
     description.trim() === "" &&
-    !image &&
-    image.trim() === "" &&
+    !images &&
+    images.trim() === "" &&
     !location &&
     location.trim() === "" &&
     !date &&
@@ -71,9 +71,9 @@ export const addPost = async (req, res, next) => {
   let post;
   try {
     post = new Post({
-      title,
+      subLocation,
       description,
-      image,
+      images,
       location,
       date: new Date(`${date}`),
       user,
@@ -101,14 +101,14 @@ export const addPost = async (req, res, next) => {
 //update post
 export const updatePost = async (req, res) => {
   const id = req.params.id;
-  const { title, description, image, location, date } = req.body;
+  const { subLocation, description, images, location, date } = req.body;
   if (
-    !title &&
-    title.trim() === "" &&
+    !subLocation &&
+    subLocation.trim() === "" &&
     !description &&
     description.trim() === "" &&
-    !image &&
-    image.trim() === "" &&
+    !images &&
+    images.trim() === "" &&
     !location &&
     location.trim() === "" &&
     !date &&
@@ -119,9 +119,9 @@ export const updatePost = async (req, res) => {
   let post;
   try {
     post = await Post.findByIdAndUpdate(id, {
-      title,
+      subLocation,
       description,
-      image,
+      images,
       location,
       date: new Date(`${date}`),
     });

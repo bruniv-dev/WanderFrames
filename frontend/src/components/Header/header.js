@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./Header.css";
 
-const Header = ({ classNameheader, classNamelogo, classNamenav }) => {
+const Header = ({
+  classNameheader,
+  classNamelogo,
+  classNamenav,
+  classNamesignin,
+}) => {
   const [activeLink, setActiveLink] = useState("home");
 
   const navLinks = [
@@ -34,7 +39,7 @@ const Header = ({ classNameheader, classNamelogo, classNamenav }) => {
           </NavLink>
         ))}
       </nav>
-      <button className="sign-in">Sign In</button>
+      <button className={`sign-in ${classNamesignin}`}>Sign In</button>
     </div>
   );
 };

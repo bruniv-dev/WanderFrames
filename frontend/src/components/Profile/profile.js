@@ -9,6 +9,7 @@ const Profile = () => {
         classNameheader="profile-header"
         classNamelogo="profile-logo"
         classNamenav="profile-nav"
+        classNamesignin="profile-signin"
       />
       <div className="profile-container">
         <Card />

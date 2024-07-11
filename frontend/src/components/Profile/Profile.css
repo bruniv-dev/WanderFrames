@@ -8,7 +8,7 @@
 
 .profile-header {
   background-color: white;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid rgb(226, 223, 223);
 }
 
 .profile-logo {
@@ -17,4 +17,8 @@
 
 .profile-nav a {
   color: black;
+}
+
+.profile-signin {
+  color: #111;
 }

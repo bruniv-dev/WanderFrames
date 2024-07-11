@@ -50,15 +50,15 @@
 }
 
 .hero-button-2 {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
   color: orange;
 }
 
-.hero-buttons button:hover {
+.hero-button-1:hover {
   background-color: rgb(252, 178, 40);
 }
 
-.hero-buttons button:nth-child(2):hover {
+.hero-button-2:hover {
   background-color: rgba(255, 255, 255, 0.4);
   color: rgb(252, 178, 40);
 }

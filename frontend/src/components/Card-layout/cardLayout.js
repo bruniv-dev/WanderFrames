@@ -1,12 +1,15 @@
+import React from "react";
 import Card from "../Card/card";
 import "./CardLayout.css";
 
-import React from "react";
+const CardLayout = ({ cardsData }) => {
+  if (!Array.isArray(cardsData)) {
+    return null; // Or render some fallback UI
+  }
 
-const CardLayout = ({ cardData }) => {
   return (
     <div className="card-layout">
-      {cardData.map((card, index) => (
+      {cardsData.map((card, index) => (
         <Card key={index} {...card} />
       ))}
     </div>

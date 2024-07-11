@@ -15,6 +15,11 @@ const userSchema = new Schema({
     required: true,
     minLength: 6,
   },
+  profileImage: {
+    type: String,
+    default:
+      "https://yourteachingmentor.com/wp-content/uploads/2020/12/istockphoto-1223671392-612x612-1.jpg",
+  },
   posts: [
     {
       type: mongoose.Types.ObjectId,

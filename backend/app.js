@@ -6,6 +6,9 @@ dotenv.config({ path: "config.env" });
 import express from "express";
 const app = express();
 
+import cors from "cors";
+app.use(cors());
+
 // import routes - middleware
 import userRouter from "./routers/user-routes.js"; // http://localhost:3000/user
 import postRouter from "./routers/post-routes.js"; // http://localhost:3000/post
@@ -26,7 +29,7 @@ mongoose
   });
 
 // start server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });

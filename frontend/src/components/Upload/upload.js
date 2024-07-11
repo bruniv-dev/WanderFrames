@@ -9,6 +9,7 @@ const Upload = () => {
         classNameheader="upload-header"
         classNamelogo="upload-logo"
         classNamenav="upload-nav"
+        classNamesignin="upload-signin"
       />
     </div>
   );

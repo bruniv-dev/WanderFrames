@@ -1,26 +1,35 @@
 import mongoose, { Schema, model } from "mongoose";
 
 const postSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
+  images: [
+    {
+      url: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+
   date: {
     type: Date,
     required: true,
   },
+
+  location: {
+    type: String,
+    required: true,
+  },
+
+  subLocation: {
+    type: String,
+    required: true,
+  },
+
+  description: {
+    type: String,
+    required: true,
+  },
+
   user: {
     type: mongoose.Types.ObjectId,
     ref: "User",

@@ -10,6 +10,7 @@ const Favorites = () => {
         classNameheader="favorites-header"
         classNamelogo="favorites-logo"
         classNamenav="favorites-nav"
+        classNamesignin="favorites-signin"
       />
       <div className="favorites-container">
         <Card />
