@@ -9,8 +9,13 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <Header />
-      <div className="container">
+      <Header
+        classNameheader=""
+        classNamelogo=""
+        classNamenav=""
+        classNamesignin=""
+      />
+      <div className="home-container">
         <h1 className="heading">WANDER FRAMES</h1>
         <h4 className="sub-heading">
           From your lens to the world: let your adventures inspire.

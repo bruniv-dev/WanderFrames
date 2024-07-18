@@ -1,0 +1,185 @@
+/* SignIn.css */
+* {
+  color: #000;
+  font-family: "Poppins", sans-serif;
+}
+
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.auth-container {
+  position: relative;
+  width: 768px;
+  min-height: 480px;
+  background: #fff;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  display: flex;
+  transition: all 0.6s ease-in-out;
+  border-radius: 10px;
+}
+
+.auth-form {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.6s ease-in-out;
+  /* border-radius: none; */
+}
+
+.signin-btn {
+  color: white;
+  background-color: orange;
+  border: 1px solid white;
+  padding: 5px 15px;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.signin-btn:hover {
+  background-color: rgb(229, 149, 1);
+}
+
+.auth-container.sign-in-mode .auth-form.sign-in-form {
+  left: -5px;
+}
+
+.auth-container.sign-in-mode .overlay-container {
+  transform: translateX(98%);
+}
+
+.auth-container.sign-up-mode .form-container.sign-up-form {
+  right: 5px;
+}
+
+.auth-container.sign-up-mode .overlay-container {
+  transform: translateX(-104%);
+}
+
+.auth-form h2 {
+  color: #3f3f3f;
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.form-group {
+  width: 65%;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 3px;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  color: #444;
+}
+
+.forgot-password {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 20px;
+}
+.auth-btn {
+  margin-top: 15px;
+  padding: 3px 15px;
+  border: none;
+  border: 1px solid orange;
+  color: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 1.2rem;
+  font-weight: 500;
+  background: transparent;
+}
+
+.auth-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transition: all 0.6s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.overlay-right {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.overlay-left {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.overlay-panel {
+  background: url("./beach.avif");
+  background-size: fit;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40px;
+  text-align: center;
+  height: 100%;
+  z-index: 5;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  width: 104%;
+  gap: 15px;
+}
+
+.overlay h2 {
+  font-size: 2.2rem;
+  color: rgb(255, 187, 61);
+}
+
+.overlay p {
+  font-size: 1.1rem;
+  color: #fffb;
+}
+
+.auth-container.sign-up-mode .overlay-right {
+  transform: translateX(100%);
+}
+
+.auth-container.sign-in-mode .overlay-right {
+  transform: translate(100%);
+}

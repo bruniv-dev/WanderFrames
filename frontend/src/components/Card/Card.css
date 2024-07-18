@@ -2,7 +2,8 @@
   position: relative;
   width: 100%;
   background-color: #fff;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 0 4px rgba(0, 0, 0, 0.3); */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin-bottom: 3rem;
 }

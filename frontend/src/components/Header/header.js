@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import "./Header.css";
+import SignIn from "../SignIn/signIn.js";
 
 const Header = ({
   classNameheader,
@@ -22,6 +23,11 @@ const Header = ({
     setActiveLink(id);
   };
 
+  const navigate = useNavigate();
+  const handleSignInClick = () => {
+    navigate("/signin");
+  };
+
   console.log(activeLink);
 
   return (
@@ -39,7 +45,9 @@ const Header = ({
           </NavLink>
         ))}
       </nav>
-      <button className={`sign-in ${classNamesignin}`}>Sign In</button>
+      <button className="sign-in" onClick={handleSignInClick}>
+        Sign In
+      </button>
     </div>
   );
 };
