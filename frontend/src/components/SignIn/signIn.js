@@ -3,9 +3,27 @@ import "./SignIn.css"; // Include CSS for styling
 
 const SignInSignUp = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [inputs, setInputs] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   const toggleForm = () => {
     setIsSignIn(!isSignIn);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(inputs);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputs((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   return (
@@ -16,15 +34,29 @@ const SignInSignUp = () => {
         }`}
       >
         <div className="auth-container">
-          <form className="auth-form sign-in-form">
+          <form className="auth-form sign-in-form" onSubmit={handleSubmit}>
             <h2>Sign In</h2>
             <div className="form-group">
-              <label for="email">Email:</label>
-              <input type="email" id="email" required />
+              <label htmlFor="email">Email:</label>
+              <input
+                name="email"
+                value={inputs.email}
+                onChange={handleChange}
+                type="email"
+                id="email"
+                required
+              />
             </div>
             <div className="form-group">
-              <label for="password">Password:</label>
-              <input type="password" id="password" required />
+              <label htmlFor="password">Password:</label>
+              <input
+                name="password"
+                value={inputs.password}
+                onChange={handleChange}
+                type="password"
+                id="password"
+                required
+              />
             </div>
             <a href="/" className="forgot-password">
               Forgot Password?
@@ -35,19 +67,40 @@ const SignInSignUp = () => {
           </form>
         </div>
         <div className="auth-container">
-          <form className="auth-form sign-up-form">
+          <form onSubmit={handleSubmit} className="auth-form sign-up-form">
             <h2>Sign Up</h2>
             <div className="form-group">
               <label htmlFor="username">Username:</label>
-              <input type="text" id="username" required />
+              <input
+                name="username"
+                value={inputs.username}
+                onChange={handleChange}
+                type="text"
+                id="username"
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="email">Email:</label>
-              <input type="email" id="email" required />
+              <input
+                name="email"
+                value={inputs.email}
+                onChange={handleChange}
+                type="email"
+                id="email"
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password:</label>
-              <input type="password" id="password" required />
+              <input
+                name="password"
+                value={inputs.password}
+                onChange={handleChange}
+                type="password"
+                id="password"
+                required
+              />
             </div>
             <button type="submit" className="signin-btn">
               Sign Up

@@ -10,7 +10,8 @@
   align-items: center;
   min-height: 100vh;
   background: #fff;
-  border-radius: 10px;
+  background: url("./maldives.jpg");
+  background-size: cover;
 }
 
 .auth-container {
@@ -74,7 +75,7 @@
   color: #3f3f3f;
   font-weight: 700;
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 28px;
 }
 
 .form-group {
@@ -84,8 +85,9 @@
 
 .form-group label {
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   color: #555;
+  font-size: 15px;
 }
 
 .form-group input {
