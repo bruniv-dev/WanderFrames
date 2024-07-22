@@ -24,15 +24,16 @@
   width: 2rem;
   height: 2rem;
   color: white;
+  fill: white;
   transition: all 0.3s;
 }
 
 .arrow:hover {
-  color: rgba(251, 233, 209, 0.7);
+  fill: rgba(251, 233, 209, 0.7);
 }
 
 .arrow:active {
-  color: rgba(255, 255, 255, 0.5);
+  fill: rgba(255, 255, 255, 0.5);
 }
 
 .right-arrow {

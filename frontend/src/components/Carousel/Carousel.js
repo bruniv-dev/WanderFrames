@@ -31,7 +31,7 @@ const Carousel = ({ data }) => {
       autoRunRef.current = setInterval(nextSlide, 3000);
     }
     return () => clearInterval(autoRunRef.current);
-  }, [isPaused]);
+  });
 
   useEffect(() => {
     if (isPaused) {

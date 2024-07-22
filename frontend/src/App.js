@@ -6,8 +6,11 @@ import Profile from "./components/Profile/profile.js";
 import Favorites from "./components/Favorites/favorites.js";
 import Upload from "./components/Upload/upload.js";
 import SignIn from "./components/SignIn/signIn.js";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const isloggedIn = useSelector((state) => state.isloggedIn);
+  console.log(isloggedIn);
   return (
     <Router>
       <Routes>
