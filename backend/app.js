@@ -1,33 +1,59 @@
 // dotenv to configure path for .env which holds secure credentials
 import dotenv from "dotenv";
-dotenv.config({ path: "config.env" });
+import path from "path";
+import { fileURLToPath } from "url";
+
+dotenv.config({
+  path: path.resolve(fileURLToPath(import.meta.url), "..", "config.env"),
+});
 
 // basic node and express setup
 import express from "express";
-const app = express();
-
 import cors from "cors";
-app.use(cors());
+import fs from "fs";
+import multer from "multer";
+import mongoose from "mongoose";
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:5000", // replace with your frontend URL
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     credentials: true,
-//   })
-// );
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// import routes - middleware
+// Create an uploads directory if it doesn't exist
+export const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Serve static files from "uploads" directory
+const app = express();
+app.use("/uploads", express.static(uploadDir));
+
+// Multer setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix =
+      new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname;
+    cb(null, uniqueSuffix);
+  },
+});
+const upload = multer({ storage: storage });
+
+// Import routes - middleware
 import userRouter from "./routers/user-routes.js"; // http://localhost:3000/user
 import postRouter from "./routers/post-routes.js"; // http://localhost:3000/post
 
-app.use(express.json()); //to process the json parsed data that is sent from the request to the backend
-app.use("/user", userRouter); //the user based routes in user-routes will work only after the /user in routes
-app.use("/post", postRouter); //the post based routes in post-routes will work only after the /post in routes
+// Middleware setup
+app.use(cors());
+app.use(express.json()); // to process JSON data sent from requests
+
+// Routes
+app.use("/user", userRouter); // User-based routes
+app.use("/post", postRouter); // Post-based routes
 
 // mongoose setup
-import mongoose from "mongoose";
-
 const mongoUri = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.psmtpt5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 mongoose
   .connect(mongoUri)
@@ -36,7 +62,7 @@ mongoose
     console.error("MongoDB connection error:", err);
   });
 
-// start server
+// Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import "./Upload.css";
 import Header from "../Header/header";
 import { addPost } from "../api-helpers/helpers";
+
 const Upload = () => {
   const [formData, setFormData] = useState({
-    images: [{ url: "" }],
+    image: null,
     location: "",
     subLocation: "",
     description: "",
@@ -17,17 +18,23 @@ const Upload = () => {
   };
 
   const handleImageChange = (e) => {
-    const { value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      images: [{ url: value }],
+      image: e.target.files[0],
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Data being sent to the server:", formData); // Debug log
-    addPost(formData)
+    const data = new FormData();
+    data.append("image", formData.image);
+    data.append("location", formData.location);
+    data.append("subLocation", formData.subLocation);
+    data.append("description", formData.description);
+    data.append("date", formData.date);
+    data.append("user", localStorage.getItem("userId"));
+
+    addPost(data)
       .then((data) => {
         console.log("Post added successfully:", data);
       })
@@ -44,14 +51,17 @@ const Upload = () => {
       />
 
       <div className="upload-container">
-        <form className="upload-form" onSubmit={handleSubmit}>
+        <form
+          className="upload-form"
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+        >
           <div className="left-section">
-            <label htmlFor="image">Image URL:</label>
+            <label htmlFor="image">Image:</label>
             <input
-              type="text"
+              type="file"
               id="image"
               name="image"
-              value={formData.images[0].url}
               onChange={handleImageChange}
               required
             />

@@ -1,14 +1,12 @@
 import mongoose, { Schema, model } from "mongoose";
 
 const postSchema = new mongoose.Schema({
-  images: [
-    {
-      url: {
-        type: String,
-        required: true,
-      },
+  image: {
+    url: {
+      type: String,
+      required: true,
     },
-  ],
+  },
 
   date: {
     type: Date,
