@@ -2,7 +2,15 @@ import React from "react";
 import "./Card.css";
 import { MdLocationOn } from "react-icons/md";
 
-const Card = ({ image, location, subLocation, description, date, id }) => {
+const Card = ({
+  image,
+  location,
+  subLocation,
+  description,
+  date,
+  id,
+  locationUrl,
+}) => {
   const mainImageUrl = image?.url || "https://placehold.co/600x400";
 
   return (
@@ -13,7 +21,9 @@ const Card = ({ image, location, subLocation, description, date, id }) => {
           <p className="username">Static Now</p>
           <p className="date">{new Date(date).toLocaleDateString()}</p>
         </div>
-        <MdLocationOn className="location-button" />
+        <a href={locationUrl} target="_blank" rel="noopener noreferrer">
+          <MdLocationOn className="location-button" />
+        </a>
         <button className="add-to-favorites">+</button>
       </div>
       <div className="card-content">

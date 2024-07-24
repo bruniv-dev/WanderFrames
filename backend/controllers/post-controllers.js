@@ -40,15 +40,14 @@ export const getPostById = async (req, res) => {
 // Define the base URL
 const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
-// Inside your addPost function
 export const addPost = async (req, res, next) => {
-  const { subLocation, description, location, date, user } = req.body;
+  const { subLocation, description, location, date, user, locationUrl } =
+    req.body;
   const imagePath = req.file ? req.file.path : "";
   const imageUrl = imagePath
     ? `${baseUrl}/uploads/${path.basename(imagePath)}`
     : "";
 
-  // Create the post object
   let post;
   try {
     post = new Post({
@@ -60,6 +59,7 @@ export const addPost = async (req, res, next) => {
       image: {
         url: imageUrl,
       },
+      locationUrl, // Add this line
     });
 
     const session = await mongoose.startSession();
@@ -81,11 +81,10 @@ export const addPost = async (req, res, next) => {
   return res.status(201).json({ post });
 };
 
-
-//update post
 export const updatePost = async (req, res) => {
   const id = req.params.id;
-  const { subLocation, description, image, location, date } = req.body;
+  const { subLocation, description, image, location, date, locationUrl } =
+    req.body;
   if (
     !subLocation &&
     subLocation.trim() === "" &&
@@ -96,7 +95,9 @@ export const updatePost = async (req, res) => {
     !location &&
     location.trim() === "" &&
     !date &&
-    date.trim() === ""
+    date.trim() === "" &&
+    !locationUrl &&
+    locationUrl.trim() === ""
   ) {
     return res.status(422).json({ message: "Invalid Input data" });
   }
@@ -108,6 +109,7 @@ export const updatePost = async (req, res) => {
       image,
       location,
       date: new Date(`${date}`),
+      locationUrl, // Add this line
     });
   } catch (err) {
     return console.log(err);
@@ -117,9 +119,47 @@ export const updatePost = async (req, res) => {
     return res.status(500).json({ message: "Unexpected Error Occured" });
   }
 
-  //created with req so 201
   return res.status(201).json({ post });
 };
+
+//update post
+// export const updatePost = async (req, res) => {
+//   const id = req.params.id;
+//   const { subLocation, description, image, location, date } = req.body;
+//   if (
+//     !subLocation &&
+//     subLocation.trim() === "" &&
+//     !description &&
+//     description.trim() === "" &&
+//     !image &&
+//     image.trim() === "" &&
+//     !location &&
+//     location.trim() === "" &&
+//     !date &&
+//     date.trim() === ""
+//   ) {
+//     return res.status(422).json({ message: "Invalid Input data" });
+//   }
+//   let post;
+//   try {
+//     post = await Post.findByIdAndUpdate(id, {
+//       subLocation,
+//       description,
+//       image,
+//       location,
+//       date: new Date(`${date}`),
+//     });
+//   } catch (err) {
+//     return console.log(err);
+//   }
+
+//   if (!post) {
+//     return res.status(500).json({ message: "Unexpected Error Occured" });
+//   }
+
+//   //created with req so 201
+//   return res.status(201).json({ post });
+// };
 
 //delete a user
 

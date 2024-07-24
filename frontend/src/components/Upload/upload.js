@@ -10,6 +10,7 @@ const Upload = () => {
     subLocation: "",
     description: "",
     date: "",
+    locationUrl: "",
   });
 
   const handleInputChange = (e) => {
@@ -24,6 +25,13 @@ const Upload = () => {
     }));
   };
 
+  const handleLocationUrlChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      locationUrl: e.target.value,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -33,6 +41,9 @@ const Upload = () => {
     data.append("description", formData.description);
     data.append("date", formData.date);
     data.append("user", localStorage.getItem("userId"));
+    if (formData.locationUrl) {
+      data.append("locationUrl", formData.locationUrl); // Only append if not empty
+    }
 
     addPost(data)
       .then((data) => {
@@ -75,6 +86,17 @@ const Upload = () => {
                 onChange={handleInputChange}
                 className="upload-input"
                 required
+              />
+            </label>
+            <label htmlFor="locationUrl" className="upload-label">
+              Google Maps URL
+              <input
+                type="url"
+                id="locationUrl"
+                name="locationUrl"
+                value={formData.locationUrl}
+                onChange={handleLocationUrlChange}
+                className="upload-input"
               />
             </label>
           </div>
