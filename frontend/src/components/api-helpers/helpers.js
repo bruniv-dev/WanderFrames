@@ -83,3 +83,35 @@ export const fetchFavorites = async () => {
     throw err;
   }
 };
+
+export const fetchUserProfile = async (userId) => {
+  try {
+    const response = await axios.get(`/user/profile/${userId}`);
+    return response.data; // Ensure this matches the API response
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw error;
+  }
+};
+
+// export const fetchUserPosts = async (userId) => {
+//   try {
+//     console.log(userId);
+//     const response = await axios.get(`user/posts/${userId}`);
+//     console.log("post", response);
+//     return response.data.posts;
+//   } catch (err) {
+//     console.error("Error fetching user posts:", err);
+//     throw err;
+//   }
+// };
+
+export const fetchUserPosts = async (userId) => {
+  try {
+    const response = await axios.get(`/user/posts/${userId}`);
+    return response.data.posts;
+  } catch (err) {
+    console.error("Error fetching user posts:", err);
+    throw err;
+  }
+};

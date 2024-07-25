@@ -3,18 +3,14 @@ import Card from "../Card/card";
 import "./CardLayout.css";
 
 const CardLayout = ({ cardsData, onFavoriteToggle }) => {
-  if (!Array.isArray(cardsData)) {
-    return null;
+  if (!cardsData || !Array.isArray(cardsData)) {
+    return <div>No cards available.</div>;
   }
 
   return (
     <div className="card-layout">
-      {cardsData.map((card, index) => (
-        <Card
-          key={index}
-          {...card}
-          onFavoriteToggle={onFavoriteToggle} // Pass callback to Card
-        />
+      {cardsData.map((card) => (
+        <Card key={card._id} {...card} onFavoriteToggle={onFavoriteToggle} />
       ))}
     </div>
   );

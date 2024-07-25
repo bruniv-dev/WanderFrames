@@ -6,6 +6,8 @@ import {
   deleteUser,
   toggleFavorite,
   getFavorites,
+  getUserProfile,
+  getUserPosts,
 } from "../controllers/user-controllers.js";
 
 const userRouter = Router();
@@ -17,5 +19,7 @@ userRouter.post("/login", login);
 userRouter.delete("/:id", deleteUser);
 userRouter.post("/toggleFavorite", toggleFavorite);
 userRouter.get("/favorites/:userId", getFavorites);
+userRouter.get("/profile/:id", getUserProfile);
+userRouter.get("/posts/:userId", getUserPosts);
 
 export default userRouter;
