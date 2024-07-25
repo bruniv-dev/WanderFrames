@@ -8,6 +8,7 @@ import {
   getFavorites,
   getUserProfile,
   getUserPosts,
+  getUserById,
 } from "../controllers/user-controllers.js";
 
 const userRouter = Router();
@@ -21,5 +22,6 @@ userRouter.post("/toggleFavorite", toggleFavorite);
 userRouter.get("/favorites/:userId", getFavorites);
 userRouter.get("/profile/:id", getUserProfile);
 userRouter.get("/posts/:userId", getUserPosts);
+userRouter.get("/:userId", getUserById);
 
 export default userRouter;

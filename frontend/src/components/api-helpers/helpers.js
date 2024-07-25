@@ -14,6 +14,16 @@ export const getAllPosts = async () => {
   }
 };
 
+export const fetchUserDetailsById = async (userId) => {
+  try {
+    const response = await axios.get(`/user/${userId}`);
+    return response.data; // Return the entire user object
+  } catch (err) {
+    console.error("Error fetching user details:", err);
+    throw err;
+  }
+};
+
 export const sendAuthRequest = async (signup, data) => {
   const endpoint = signup ? "/user/signup/" : "/user/login/";
 

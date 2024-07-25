@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Card.css";
 import { MdLocationOn } from "react-icons/md";
-import { toggleFavorite } from "../api-helpers/helpers"; // Import the API helper
+import { toggleFavorite, fetchUserDetailsById } from "../api-helpers/helpers"; // Import the API helper
 
 const Card = ({
   image,
@@ -10,16 +10,27 @@ const Card = ({
   description,
   date,
   _id, // Use _id as postId
+  userId, // Add userId prop
   locationUrl,
   onFavoriteToggle, // Callback to notify parent of change
 }) => {
   const mainImageUrl = image?.url || "https://placehold.co/600x400";
   const [isFavorite, setIsFavorite] = useState(false);
+  const [userDetails, setUserDetails] = useState({}); // Initialize as an empty object
 
   useEffect(() => {
+    // Check if the post is a favorite
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setIsFavorite(favorites.includes(_id));
-  }, [_id]);
+
+    const userId = localStorage.getItem("userId");
+    // Fetch user details
+    if (userId) {
+      fetchUserDetailsById(userId)
+        .then((user) => setUserDetails(user))
+        .catch((err) => console.error("Error fetching user details:", err));
+    }
+  }, [_id, userId]);
 
   const handleFavoriteClick = () => {
     if (_id) {
@@ -58,7 +69,15 @@ const Card = ({
       <img className="main-image" src={mainImageUrl} alt="Main" />
       <div className="card-header">
         <div className="user-info">
-          <p className="username">Static Now</p>
+          {/* {userDetails.profileImage && (
+            <img
+              className="user-profile-image"
+              src={userDetails.profileImage}
+              alt="User"
+            />
+          )} */}
+          <p className="username">{userDetails.name || "Unknown User"}</p>
+
           <p className="date">{new Date(date).toLocaleDateString()}</p>
         </div>
         {locationUrl && (
