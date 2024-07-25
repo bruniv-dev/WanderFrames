@@ -52,3 +52,34 @@ export const addPost = async (data) => {
 
   return res.data;
 };
+
+export const toggleFavorite = async (postId) => {
+  const userId = localStorage.getItem("userId");
+  if (!userId || !postId) {
+    throw new Error("User ID or Post ID is missing");
+  }
+
+  try {
+    const res = await axios.post("/user/toggleFavorite", { userId, postId });
+    return res.data; // Data should include the updated favorites list
+  } catch (error) {
+    console.error("Error toggling favorite:", error.message);
+    throw error;
+  }
+};
+
+// Fetch favorites for the logged-in user
+export const fetchFavorites = async () => {
+  const userId = localStorage.getItem("userId");
+  if (!userId) {
+    throw new Error("User ID is missing");
+  }
+
+  try {
+    const response = await axios.get(`/user/favorites/${userId}`);
+    return response.data; // Data should include the favorites list
+  } catch (err) {
+    console.error("Error fetching favorites:", err);
+    throw err;
+  }
+};

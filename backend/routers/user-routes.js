@@ -4,6 +4,8 @@ import {
   login,
   signup,
   deleteUser,
+  toggleFavorite,
+  getFavorites,
 } from "../controllers/user-controllers.js";
 
 const userRouter = Router();
@@ -13,5 +15,7 @@ userRouter.get("/", getAllUsers);
 userRouter.post("/signup", signup);
 userRouter.post("/login", login);
 userRouter.delete("/:id", deleteUser);
+userRouter.post("/toggleFavorite", toggleFavorite);
+userRouter.get("/favorites/:userId", getFavorites);
 
-export default userRouter; // use this in app.js
+export default userRouter;

@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
-import { uploadDir } from "../app.js";
 import path from "path";
 
 //get all posts

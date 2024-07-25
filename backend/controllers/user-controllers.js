@@ -144,3 +144,51 @@ export const deleteUser = async (req, res) => {
     return res.status(500).json({ message: "Unexpected Error Occurred" });
   }
 };
+
+export const toggleFavorite = async (req, res) => {
+  const userId = req.body.userId;
+  const postId = req.body.postId;
+
+  console.log("User ID:", userId);
+  console.log("Post ID:", postId);
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isFavorite = user.favorites.includes(postId);
+    if (isFavorite) {
+      user.favorites.pull(postId); // Remove from favorites
+    } else {
+      user.favorites.push(postId); // Add to favorites
+    }
+
+    await user.save(); // Save the updated user
+    console.log("Favorites updated:", user.favorites); // Log updated favorites
+
+    return res.status(200).json({ favorites: user.favorites });
+  } catch (error) {
+    console.error("Failed to toggle favorite:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to toggle favorite", error });
+  }
+};
+
+export const getFavorites = async (req, res) => {
+  const userId = req.params.userId; // Get userId from URL parameter
+
+  try {
+    const user = await User.findById(userId).populate("favorites"); // Populate to get post details
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ favorites: user.favorites });
+  } catch (error) {
+    console.error("Failed to get favorites:", error);
+    return res.status(500).json({ message: "Failed to get favorites", error });
+  }
+};

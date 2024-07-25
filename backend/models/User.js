@@ -26,6 +26,12 @@ const userSchema = new Schema({
       ref: "Post",
     },
   ],
+  favorites: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
 });
 
 //model("name of model", schema of model)
