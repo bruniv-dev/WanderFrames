@@ -208,22 +208,6 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-// export const getUserPosts = async (req, res) => {
-//   try {
-//     const userId = req.params.userId;
-//     // Fetch posts made by the user
-//     const posts = await Post.find({ user: userId });
-//     console.log("all", posts);
-//     if (!posts) {
-//       return res.status(404).json({ message: "No posts found for this user" });
-//     }
-//     res.status(200).json({ posts });
-//   } catch (error) {
-//     console.error("Failed to get user posts:", error);
-//     res.status(500).json({ message: "Failed to get user posts", error });
-//   }
-// };
-
 export const getUserPosts = async (req, res) => {
   try {
     const userId = req.params.userId;

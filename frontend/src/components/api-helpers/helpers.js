@@ -94,18 +94,6 @@ export const fetchUserProfile = async (userId) => {
   }
 };
 
-// export const fetchUserPosts = async (userId) => {
-//   try {
-//     console.log(userId);
-//     const response = await axios.get(`user/posts/${userId}`);
-//     console.log("post", response);
-//     return response.data.posts;
-//   } catch (err) {
-//     console.error("Error fetching user posts:", err);
-//     throw err;
-//   }
-// };
-
 export const fetchUserPosts = async (userId) => {
   try {
     const response = await axios.get(`/user/posts/${userId}`);
