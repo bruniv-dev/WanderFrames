@@ -1,11 +1,14 @@
-// auth.js
 import { createSlice, configureStore } from "@reduxjs/toolkit";
+
+// Initial state with potential data from localStorage
+const loadAuthState = () => {
+  const userId = localStorage.getItem("userId");
+  return { isloggedIn: !!userId };
+};
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    isloggedIn: false,
-  },
+  initialState: loadAuthState(), // Load initial state from localStorage
   reducers: {
     login(state) {
       state.isloggedIn = true;
@@ -16,6 +19,10 @@ const authSlice = createSlice({
   },
 });
 
+// Export actions for use in components
 export const authActions = authSlice.actions;
 
-export const store = configureStore({ reducer: authSlice.reducer });
+// Configure store with authReducer
+export const store = configureStore({
+  reducer: authSlice.reducer,
+});
