@@ -7,10 +7,23 @@ const CardLayout = ({ cardsData, onFavoriteToggle }) => {
     return <div>No cards available.</div>;
   }
 
+  console.log("Cards Data:", cardsData); // Debug log to check data structure
+
   return (
     <div className="card-layout">
       {cardsData.map((card) => (
-        <Card key={card._id} {...card} onFavoriteToggle={onFavoriteToggle} />
+        <Card
+          key={card._id}
+          _id={card._id}
+          userId={card.user}
+          image={card.image}
+          location={card.location}
+          subLocation={card.subLocation}
+          description={card.description}
+          date={card.date}
+          locationUrl={card.locationUrl}
+          onFavoriteToggle={onFavoriteToggle}
+        />
       ))}
     </div>
   );
