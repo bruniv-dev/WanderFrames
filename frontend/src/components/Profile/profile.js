@@ -10,27 +10,35 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-          throw new Error("User not authenticated");
-        }
-        const userData = await fetchUserProfile(userId);
-        setUser(userData.user);
-        const userPosts = await fetchUserPosts(userId);
-        setPosts(userPosts);
-      } catch (err) {
-        console.error("Error fetching user details or posts:", err);
-        setError(err.message || "Failed to fetch user details or posts");
-      } finally {
-        setLoading(false);
+  const fetchUserDetails = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        throw new Error("User not authenticated");
       }
-    };
+      const userData = await fetchUserProfile(userId);
+      setUser(userData.user);
+      const userPosts = await fetchUserPosts(userId);
+      setPosts(userPosts);
+      console.log(posts);
+    } catch (err) {
+      console.error("Error fetching user details or posts:", err);
+      setError(
+        err.response?.data?.message || "Failed to fetch user details or posts"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUserDetails();
   }, []);
+
+  const handlePostDelete = async (postId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+    await fetchUserDetails(); // Re-fetch user details to ensure updated data
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -66,7 +74,11 @@ const Profile = () => {
         )}
         <div className="posts-section">
           <h2>Your Posts</h2>
-          <CardLayout cardsData={posts} />
+          {posts.length > 0 ? (
+            <CardLayout cardsData={posts} onDelete={handlePostDelete} />
+          ) : (
+            <p>No posts yet</p>
+          )}
         </div>
       </div>
     </>

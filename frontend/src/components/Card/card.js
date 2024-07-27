@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { MdLocationOn, MdDeleteForever, MdEdit } from "react-icons/md";
+import {
+  toggleFavorite,
+  fetchUserDetailsById,
+  deletePostById,
+} from "../api-helpers/helpers";
+
 import "./Card.css";
-import { MdLocationOn } from "react-icons/md";
-import { MdDeleteForever } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
-import { toggleFavorite, fetchUserDetailsById } from "../api-helpers/helpers"; // Import the API helper
 
 const Card = ({
   image,
@@ -11,29 +14,24 @@ const Card = ({
   subLocation,
   description,
   date,
-  _id, // Use _id as postId
-  userId, // Add userId prop
+  _id,
+  userId,
   locationUrl,
-  onFavoriteToggle, // Callback to notify parent of change
+  onFavoriteToggle,
+  onDelete,
 }) => {
   const mainImageUrl = image?.url || "https://placehold.co/600x400";
   const [isFavorite, setIsFavorite] = useState(false);
-  const [userDetails, setUserDetails] = useState({}); // Initialize as an empty object
+  const [userDetails, setUserDetails] = useState({});
   const [loggedInUserId, setLoggedInUserId] = useState(null);
 
   useEffect(() => {
-    console.log("Post ID (_id):", _id); // Debug log for _id
-    console.log("User ID (userId):", userId); // Debug log for userId
-
-    // Check if the post is a favorite
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setIsFavorite(favorites.includes(_id));
 
     const storedUserId = localStorage.getItem("userId");
-    console.log("Stored user ID:", storedUserId); // Debug log
     setLoggedInUserId(storedUserId);
 
-    // Fetch user details
     if (userId) {
       fetchUserDetailsById(userId)
         .then((user) => setUserDetails(user))
@@ -45,10 +43,7 @@ const Card = ({
     if (_id) {
       toggleFavorite(_id)
         .then((data) => {
-          console.log("Favorite toggled, new data:", data);
-          setIsFavorite(!isFavorite); // Toggle favorite state
-
-          // Update localStorage with the new state
+          setIsFavorite(!isFavorite);
           const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
           if (isFavorite) {
             localStorage.setItem(
@@ -61,8 +56,6 @@ const Card = ({
               JSON.stringify([...favorites, _id])
             );
           }
-
-          // Notify parent component of the change
           if (onFavoriteToggle) {
             onFavoriteToggle();
           }
@@ -70,6 +63,18 @@ const Card = ({
         .catch((err) => console.log("Error in toggleFavorite:", err));
     } else {
       console.error("Post ID (_id) is missing");
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      deletePostById(_id)
+        .then(() => {
+          if (onDelete) {
+            onDelete(_id); // Notify parent component to refresh the profile
+          }
+        })
+        .catch((err) => console.error("Error deleting post:", err));
     }
   };
 
@@ -94,12 +99,12 @@ const Card = ({
         </button>
         {loggedInUserId === userId && (
           <>
-            <button>
-              <MdEdit className="e-d-btn edit-button" />
-            </button>
-            <button>
-              <MdDeleteForever className="e-d-btn delete-button" />
-            </button>
+            <MdEdit className="e-d-btn edit-button" />
+
+            <MdDeleteForever
+              className="e-d-btn delete-button"
+              onClick={handleDeleteClick}
+            />
           </>
         )}
       </div>

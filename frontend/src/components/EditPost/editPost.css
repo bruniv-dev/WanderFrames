@@ -1,0 +1,36 @@
+.edit-post-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.edit-post-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-post-form label {
+  margin-bottom: 15px;
+}
+
+.edit-post-form input,
+.edit-post-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-post-form button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-post-form button:hover {
+  background-color: #0056b3;
+}

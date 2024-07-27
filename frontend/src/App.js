@@ -7,6 +7,7 @@ import Favorites from "./components/Favorites/favorites.js";
 import Upload from "./components/Upload/upload.js";
 import SignIn from "./components/SignIn/signIn.js";
 import { useSelector } from "react-redux";
+import EditPost from "./components/EditPost/editPost.js";
 
 const App = () => {
   const isloggedIn = useSelector((state) => state.isloggedIn);
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/inspirations" element={<Inspirations />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/editPost" element={<EditPost />} />
       </Routes>
     </Router>
   );

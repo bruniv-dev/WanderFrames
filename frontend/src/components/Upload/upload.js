@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import "./Upload.css";
 import Header from "../Header/header";
 import { addPost } from "../api-helpers/helpers";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     image: null,
     location: "",
@@ -46,10 +49,11 @@ const Upload = () => {
     }
 
     addPost(data)
-      .then((data) => {
-        console.log("Post added successfully:", data);
+      .then((response) => {
+        console.log("Post added successfully:", response);
+        navigate("/profile");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error("Error adding post:", err));
   };
 
   return (

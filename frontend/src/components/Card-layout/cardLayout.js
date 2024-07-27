@@ -2,7 +2,7 @@ import React from "react";
 import Card from "../Card/card";
 import "./CardLayout.css";
 
-const CardLayout = ({ cardsData, onFavoriteToggle }) => {
+const CardLayout = ({ cardsData, onFavoriteToggle, onDelete }) => {
   if (!cardsData || !Array.isArray(cardsData)) {
     return <div>No cards available.</div>;
   }
@@ -23,6 +23,7 @@ const CardLayout = ({ cardsData, onFavoriteToggle }) => {
           date={card.date}
           locationUrl={card.locationUrl}
           onFavoriteToggle={onFavoriteToggle}
+          onDelete={onDelete}
         />
       ))}
     </div>

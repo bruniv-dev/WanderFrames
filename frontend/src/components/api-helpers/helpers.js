@@ -24,6 +24,17 @@ export const fetchUserDetailsById = async (userId) => {
   }
 };
 
+// Fetch a single post by ID
+export const fetchPostById = async (postId) => {
+  try {
+    const response = await axios.get(`/post/${postId}`);
+    return response.data; // Return the post data from the response
+  } catch (error) {
+    console.error("Error fetching post by ID:", error.message);
+    throw error; // Propagate the error to handle it further if needed
+  }
+};
+
 export const sendAuthRequest = async (signup, data) => {
   const endpoint = signup ? "/user/signup/" : "/user/login/";
 
@@ -111,5 +122,47 @@ export const fetchUserPosts = async (userId) => {
   } catch (err) {
     console.error("Error fetching user posts:", err);
     throw err;
+  }
+};
+
+export const updatePost = async (id, postData, imageFile = null) => {
+  try {
+    // Create a FormData object to handle the file upload
+    const formData = new FormData();
+
+    // Append post data
+    Object.keys(postData).forEach((key) => {
+      formData.append(key, postData[key]);
+    });
+
+    // Append image file if provided
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    const response = await axios.put(`/post/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Ensure the correct content type for FormData
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error("Failed to update the post");
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating post:", error.message);
+    throw error;
+  }
+};
+
+export const deletePostById = async (id) => {
+  try {
+    const response = await axios.delete(`/post/${id}`);
+    return response.data; // Ensure this matches the API response structure
+  } catch (error) {
+    console.error("Error deleting post by ID:", error);
+    throw error;
   }
 };

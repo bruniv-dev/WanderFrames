@@ -84,41 +84,32 @@ export const updatePost = async (req, res) => {
   const id = req.params.id;
   const { subLocation, description, image, location, date, locationUrl } =
     req.body;
-  if (
-    !subLocation &&
-    subLocation.trim() === "" &&
-    !description &&
-    description.trim() === "" &&
-    !image &&
-    image.trim() === "" &&
-    !location &&
-    location.trim() === "" &&
-    !date &&
-    date.trim() === "" &&
-    !locationUrl &&
-    locationUrl.trim() === ""
-  ) {
-    return res.status(422).json({ message: "Invalid Input data" });
-  }
-  let post;
+
+  // Validate input data here...
+
   try {
-    post = await Post.findByIdAndUpdate(id, {
-      subLocation,
-      description,
-      image,
-      location,
-      date: new Date(`${date}`),
-      locationUrl, // Add this line
-    });
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      {
+        subLocation,
+        description,
+        image,
+        location,
+        date: new Date(date),
+        locationUrl,
+      },
+      { new: true }
+    ); // `new: true` returns the updated document
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json({ post: updatedPost });
   } catch (err) {
-    return console.log(err);
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
-
-  if (!post) {
-    return res.status(500).json({ message: "Unexpected Error Occured" });
-  }
-
-  return res.status(201).json({ post });
 };
 
 //update post
@@ -164,23 +155,40 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   const id = req.params.id;
-  let post;
+
   try {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    post = await Post.findById(id).populate("user");
-    post.user.posts.pull(post);
-    await post.user.save({ session });
-    post = await Post.findByIdAndDelete(id);
-    session.commitTransaction();
+    const post = await Post.findByIdAndDelete(id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    return res.status(200).json({ message: "Post deleted successfully" });
   } catch (err) {
-    return console.log(err);
+    console.error("Error deleting post:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
-
-  if (!post) {
-    return res.status(500).json({ message: "Unexpected Error Occured" });
-  }
-
-  //created with req so 201
-  return res.status(201).json({ message: "Post deleted Successfully" });
 };
+
+// export const deletePost = async (req, res) => {
+//   const id = req.params.id;
+//   let post;
+//   try {
+//     const session = await mongoose.startSession();
+//     session.startTransaction();
+//     post = await Post.findById(id).populate("user");
+//     post.user.posts.pull(post);
+//     await post.user.save({ session });
+//     post = await Post.findByIdAndDelete(id);
+//     session.commitTransaction();
+//   } catch (err) {
+//     return console.log(err);
+//   }
+
+//   if (!post) {
+//     return res.status(500).json({ message: "Unexpected Error Occured" });
+//   }
+
+//   //created with req so 201
+//   return res.status(201).json({ message: "Post deleted Successfully" });
+// };
