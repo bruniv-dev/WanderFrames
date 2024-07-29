@@ -35,10 +35,18 @@ const SignInSignUp = () => {
         const userId = data.user ? data.user._id : data.id; // Check for user object in response for sign-up
         if (userId) {
           localStorage.setItem("userId", userId);
+          if (isSignUp) {
+            // If it's a sign-up, switch to sign-in mode
+            setIsSignUp(false);
+            // Optionally, you could show a message or automatically log in the user
+            alert("Sign-up successful! Please log in.");
+          } else {
+            // If it's a sign-in, redirect to homepage after login
+            navigate("/");
+          }
         } else {
           console.error("User ID not found in the response");
         }
-        navigate("/"); // Redirect to homepage after login/signup
       })
       .catch((err) => console.log(err));
   };

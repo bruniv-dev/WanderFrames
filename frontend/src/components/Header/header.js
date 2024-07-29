@@ -17,7 +17,7 @@ const Header = ({
   const handleLogout = () => {
     dispatch(authActions.logout());
     localStorage.removeItem("userId");
-    navigate("/signin");
+    navigate("/loginSignup");
   };
 
   const generalLinks = [
@@ -56,7 +56,7 @@ const Header = ({
       ) : (
         <button
           className={`sign-in ${classNamesignin}`}
-          onClick={() => navigate("/signin")}
+          onClick={() => navigate("/loginSignup")}
         >
           Log In
         </button>

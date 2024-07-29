@@ -20,8 +20,8 @@ const App = () => {
         <Route path="/upload" element={<Upload />} />
         <Route path="/inspirations" element={<Inspirations />} />
         <Route path="/favorites" element={<Favorites />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/editPost" element={<EditPost />} />
+        <Route path="/loginSignup" element={<SignIn />} />
+        <Route path="/editPost/:postId" element={<EditPost />} />
       </Routes>
     </Router>
   );
