@@ -29,10 +29,8 @@ const Profile = () => {
         throw new Error("User not authenticated");
       }
       const userData = await fetchUserProfile(userId);
-      console.log("Fetched user data:", userData);
       setUser(userData.user);
       const userPosts = await fetchUserPosts(userId);
-      console.log("Fetched user posts:", userPosts);
       setPosts(userPosts);
     } catch (err) {
       console.error("Error fetching user details or posts:", err);

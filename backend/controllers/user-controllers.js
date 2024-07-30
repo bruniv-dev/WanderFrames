@@ -2,6 +2,7 @@ import { compareSync, hashSync } from "bcrypt";
 import User from "../models/User.js";
 import mongoose from "mongoose";
 import Post from "../models/Post.js";
+import path from "path";
 
 //GET ALL USERS
 export const getAllUsers = async (req, res) => {
@@ -259,21 +260,57 @@ export const deleteUserAccount = async (req, res) => {
   }
 };
 
+// export const updateUserProfile = async (req, res) => {
+//   const { userId } = req.params;
+//   const { bio, name } = req.body;
+//   const profileImage = req.file?.path; // Assuming you're using multer for file uploads
+
+//   try {
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     if (bio) user.bio = bio;
+//     if (name) user.name = name;
+//     // if (profileImage) user.profileImage = profileImage;
+
+//     if (profileImage) {
+//       user.profileImage = profileImage.replace(/\\/g, "/"); // Normalize path
+//     }
+//     await user.save();
+
+//     res.json({ message: "Profile updated successfully", user });
+//   } catch (error) {
+//     console.error("Error updating user profile:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+
 export const updateUserProfile = async (req, res) => {
   const { userId } = req.params;
   const { bio, name } = req.body;
-  const profileImage = req.file?.path; // Assuming you're using multer for file uploads
+  const profileImage = req.file ? req.file.path : "";
+  const profileImageUrl = profileImage
+    ? `${baseUrl}/uploads/${path.basename(profileImage)}`
+    : "";
 
   try {
-    const user = await User.findById(userId);
+    let user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     if (bio) user.bio = bio;
     if (name) user.name = name;
-    if (profileImage) user.profileImage = profileImage;
+    // if (profileImage) user.profileImage = profileImage;
+    if (profileImage) user.profileImage = profileImageUrl;
 
+    // if (profileImage) {
+    //   user.profileImage = profileImage.replace(/\\/g, "/"); // Normalize path
+    // }
     await user.save();
 
     res.json({ message: "Profile updated successfully", user });
