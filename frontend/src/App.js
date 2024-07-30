@@ -8,6 +8,8 @@ import Upload from "./components/Upload/upload.js";
 import SignIn from "./components/SignIn/signIn.js";
 import { useSelector } from "react-redux";
 import EditPost from "./components/EditPost/editPost.js";
+import ForgotPassword from "./components/ForgotPassword/forgotPassword.js";
+import ResetPassword from "./ResetPassword/resetPassword.js";
 
 const App = () => {
   const isloggedIn = useSelector((state) => state.isloggedIn);
@@ -22,6 +24,8 @@ const App = () => {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/loginSignup" element={<SignIn />} />
         <Route path="/editPost/:postId" element={<EditPost />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

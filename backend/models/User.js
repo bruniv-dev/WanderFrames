@@ -81,6 +81,61 @@ const userSchema = new Schema({
       ref: "Post",
     },
   ],
+  isAdmin: {
+    type: Boolean,
+    default: false, // Default to non-admin
+  },
+  securityQuestion: {
+    type: String,
+    required: true,
+  },
+  securityAnswer: {
+    type: String,
+    required: true,
+  },
+  securityQuestion: {
+    type: String,
+    required: true,
+  },
+  securityAnswer: {
+    type: String,
+    required: true,
+  },
+  resetToken: String,
+  resetTokenExpiration: Date,
 });
 
 export default model("User", userSchema);
+
+// // models/User.js
+// import mongoose from 'mongoose';
+
+// const userSchema = new mongoose.Schema({
+//   name: {
+//     type: String,
+//     required: true,
+//   },
+//   email: {
+//     type: String,
+//     required: true,
+//     unique: true,
+//   },
+//   password: {
+//     type: String,
+//     required: true,
+//   },
+//   securityQuestion: {
+//     type: String,
+//     required: true,
+//   },
+//   securityAnswer: {
+//     type: String,
+//     required: true,
+//   },
+//   resetToken: String,
+//   resetTokenExpiration: Date,
+// });
+
+// const User = mongoose.model('User', userSchema);
+
+// export default User;

@@ -13,6 +13,9 @@ import {
   getUserById,
   deleteUserAccount,
   updateUserProfile,
+  requestReset,
+  resetPassword,
+  verifySecurityAnswer,
 } from "../controllers/user-controllers.js";
 
 const upload = multer({ dest: "uploads/" }); // Configure multer
@@ -31,4 +34,7 @@ userRouter.get("/posts/:userId", getUserPosts);
 userRouter.get("/:userId", getUserById);
 userRouter.delete("/:id", deleteUserAccount);
 userRouter.put("/:userId", upload.single("profileImage"), updateUserProfile);
+userRouter.post("/requestReset", requestReset);
+userRouter.post("/verifySecurityAnswer", verifySecurityAnswer);
+userRouter.post("/reset-password/:userId", resetPassword);
 export default userRouter;
