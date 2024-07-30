@@ -37,49 +37,6 @@ export const getUserById = async (req, res) => {
   }
 };
 
-//USERS SIGN UP
-
-// export const signup = async (req, res, next) => {
-//   // Destructure name, email, and password from the request body
-//   const { name, email, password } = req.body;
-
-//   // Validate input fields
-//   if (
-//     !name &&
-//     name.trim() === "" &&
-//     !email &&
-//     email.trim() === "" &&
-//     !password &&
-//     password.length < 6
-//   ) {
-//     // Unprocessable Entity status for invalid data
-//     return res.status(422).json({ message: "Invalid Data" });
-//   }
-
-//   // Hash the password using bcrypt
-//   const saltRounds = 10;
-//   const hashedPassword = hashSync(password, saltRounds);
-
-//   let user;
-//   try {
-//     // Create a new user instance with the hashed password
-//     user = new User({ name, email, password: hashedPassword });
-//     // Save the user to the database
-//     await user.save();
-//   } catch (err) {
-//     // Log any error that occurs during saving
-//     return console.log(err);
-//   }
-
-//   // If user creation failed, send an error response
-//   if (!user) {
-//     return res.status(500).json({ message: "Unexpected Error Occurred" });
-//   }
-
-//   // Send a success response with the created user
-//   return res.status(201).json({ user });
-// };
-
 // Signup Controller
 export const signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -285,29 +242,6 @@ export const getUserPosts = async (req, res) => {
     res.status(500).json({ message: "Failed to get user posts", error });
   }
 };
-// export const editUserProfile = async (req, res) => {
-//   const userId = req.params.id;
-//   const { name, email, password } = req.body;
-
-//   try {
-//     const updatedData = { name, email };
-//     if (password) {
-//       updatedData.password = await bcrypt.hash(password, 10);
-//     }
-
-//     const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
-//       new: true,
-//     });
-//     if (!updatedUser) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     res.status(200).json({ user: updatedUser });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
 
 export const deleteUserAccount = async (req, res) => {
   const userId = req.params.id;
@@ -321,6 +255,30 @@ export const deleteUserAccount = async (req, res) => {
     res.status(200).json({ message: "User account deleted successfully" });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  const { userId } = req.params;
+  const { bio, name } = req.body;
+  const profileImage = req.file?.path; // Assuming you're using multer for file uploads
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (bio) user.bio = bio;
+    if (name) user.name = name;
+    if (profileImage) user.profileImage = profileImage;
+
+    await user.save();
+
+    res.json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    console.error("Error updating user profile:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

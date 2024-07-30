@@ -9,16 +9,18 @@ import "./Profile.css";
 import Header from "../Header/header";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { authActions } from "../../store"; // Import your auth actions
+import { authActions } from "../../store";
+import EditProfileDetails from "../EditProfileDetails/editProfileDetails";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Initialize dispatch
+  const dispatch = useDispatch();
 
   const fetchUserDetails = async () => {
     try {
@@ -48,7 +50,7 @@ const Profile = () => {
 
   const handlePostDelete = async (postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-    await fetchUserDetails(); // Re-fetch user details to ensure updated data
+    await fetchUserDetails();
   };
 
   const handleDeleteProfile = async () => {
@@ -62,14 +64,19 @@ const Profile = () => {
           throw new Error("User not authenticated");
         }
         await deleteUserAccount(userId);
-        localStorage.removeItem("userId"); // Clear userId from local storage
-        dispatch(authActions.logout()); // Dispatch logout action
-        navigate("/loginSignup"); // Redirect to login page
+        localStorage.removeItem("userId");
+        dispatch(authActions.logout());
+        navigate("/loginSignup");
       } catch (err) {
         console.error("Error deleting user profile:", err);
         setError("Failed to delete profile.");
       }
     }
+  };
+
+  const handleProfileUpdate = (updatedUser) => {
+    setUser(updatedUser);
+    setIsEditing(false);
   };
 
   if (loading) {
@@ -102,10 +109,15 @@ const Profile = () => {
                 Bio: {user.bio || "Hi, I'm excited to share my travel diaries."}
               </p>
               <p>Joined: {new Date(user.createdAt).toLocaleDateString()}</p>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="edit-button"
+              >
+                Edit Profile
+              </button>
               <button onClick={handleDeleteProfile} className="delete-button">
                 Delete Profile
-              </button>{" "}
-              {/* Delete button */}
+              </button>
             </div>
           </div>
         ) : (
@@ -119,6 +131,13 @@ const Profile = () => {
             <p>No posts available</p>
           )}
         </div>
+        {isEditing && (
+          <EditProfileDetails
+            user={user}
+            onClose={() => setIsEditing(false)}
+            onUpdate={handleProfileUpdate}
+          />
+        )}
       </div>
     </>
   );

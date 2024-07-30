@@ -24,17 +24,6 @@ export const fetchUserDetailsById = async (userId) => {
   }
 };
 
-// // Fetch a single post by ID
-// export const fetchPostById = async (postId) => {
-//   try {
-//     const response = await axios.get(`/post/${postId}`);
-//     return response.data; // Return the post data from the response
-//   } catch (error) {
-//     console.error("Error fetching post by ID:", error.message);
-//     throw error; // Propagate the error to handle it further if needed
-//   }
-// };
-
 export const fetchPostById = async (postId) => {
   const res = await axios.get(`/post/${postId}`).catch((err) => {
     console.log(err);
@@ -173,20 +162,6 @@ export const deletePostById = async (id) => {
   }
 };
 
-// export const updateUserProfile = async (userId, userData) => {
-//   try {
-//     const response = await axios.put(`/user/${userId}`, userData, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error updating user profile:", error.message);
-//     throw error;
-//   }
-// };
-
 // API call to delete user account
 export const deleteUserAccount = async (userId) => {
   try {
@@ -195,5 +170,21 @@ export const deleteUserAccount = async (userId) => {
   } catch (error) {
     console.error("Error deleting user account:", error.message);
     throw error;
+  }
+};
+
+export const updateUserProfile = async (userId, formData) => {
+  try {
+    const response = await axios.put(`/user/${userId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    throw error.response
+      ? error.response.data
+      : new Error("Error updating user profile");
   }
 };

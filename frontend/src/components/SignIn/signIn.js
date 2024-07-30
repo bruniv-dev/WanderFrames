@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SignIn.css"; // Include CSS for styling
 import { sendAuthRequest } from "../api-helpers/helpers";
 import { useDispatch } from "react-redux";
@@ -17,6 +17,15 @@ const SignInSignUp = () => {
     password: "",
   });
 
+  // Reset form fields when toggling forms
+  useEffect(() => {
+    setInputs({
+      username: "",
+      email: "",
+      password: "",
+    });
+  }, [isSignUp]);
+
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
   };
@@ -25,27 +34,27 @@ const SignInSignUp = () => {
     e.preventDefault();
 
     const authAction = isSignUp
-      ? sendAuthRequest(true, inputs)
-      : sendAuthRequest(false, inputs);
+      ? sendAuthRequest(true, inputs) // Sign up
+      : sendAuthRequest(false, inputs); // Log in
 
     authAction
       .then((data) => {
         console.log(data); // Log the entire response data for debugging
-        dispatch(authActions.login());
-        const userId = data.user ? data.user._id : data.id; // Check for user object in response for sign-up
-        if (userId) {
-          localStorage.setItem("userId", userId);
-          if (isSignUp) {
-            // If it's a sign-up, switch to sign-in mode
-            setIsSignUp(false);
-            // Optionally, you could show a message or automatically log in the user
-            alert("Sign-up successful! Please log in.");
-          } else {
-            // If it's a sign-in, redirect to homepage after login
-            navigate("/");
-          }
+
+        if (isSignUp) {
+          // On sign-up, show a success message and prompt for login
+          alert("Sign-up successful! Please log in.");
+          setIsSignUp(false); // Switch to the login form
         } else {
-          console.error("User ID not found in the response");
+          // On sign-in, dispatch login action and navigate
+          dispatch(authActions.login());
+          const userId = data.user ? data.user._id : data.id; // Check for user object in response for sign-in
+          if (userId) {
+            localStorage.setItem("userId", userId);
+            navigate("/"); // Redirect to homepage after login
+          } else {
+            console.error("User ID not found in the response");
+          }
         }
       })
       .catch((err) => console.log(err));
@@ -74,78 +83,80 @@ const SignInSignUp = () => {
           }`}
         >
           <div className="auth-container">
-            <form className="auth-form sign-in-form" onSubmit={handleSubmit}>
-              <h2>Log In</h2>
-              <div className="form-group">
-                <label htmlFor="email">Email:</label>
-                <input
-                  name="email"
-                  value={inputs.email}
-                  onChange={handleChange}
-                  type="email"
-                  id="email"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                  name="password"
-                  value={inputs.password}
-                  onChange={handleChange}
-                  type="password"
-                  id="password"
-                  required
-                />
-              </div>
-              <a href="/" className="forgot-password">
-                Forgot Password?
-              </a>
-              <button type="submit" className="signin-btn">
-                Log In
-              </button>
-            </form>
+            {/* Sign-In Form */}
+            {!isSignUp && (
+              <form className="auth-form sign-in-form" onSubmit={handleSubmit}>
+                <h2>Log In</h2>
+                <div className="form-group">
+                  <label htmlFor="email">Email:</label>
+                  <input
+                    name="email"
+                    value={inputs.email}
+                    onChange={handleChange}
+                    type="email"
+                    id="email"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="password">Password:</label>
+                  <input
+                    name="password"
+                    onChange={handleChange}
+                    type="password"
+                    id="password"
+                    required
+                  />
+                </div>
+                <a href="/" className="forgot-password">
+                  Forgot Password?
+                </a>
+                <button type="submit" className="signin-btn">
+                  Log In
+                </button>
+              </form>
+            )}
           </div>
           <div className="auth-container">
-            <form onSubmit={handleSubmit} className="auth-form sign-up-form">
-              <h2>Sign Up</h2>
-              <div className="form-group">
-                <label htmlFor="username">Username:</label>
-                <input
-                  name="username"
-                  value={inputs.username}
-                  onChange={handleChange}
-                  type="text"
-                  id="username"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email:</label>
-                <input
-                  name="email"
-                  value={inputs.email}
-                  onChange={handleChange}
-                  type="email"
-                  id="email"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                  name="password"
-                  value={inputs.password}
-                  onChange={handleChange}
-                  type="password"
-                  id="password"
-                  required
-                />
-              </div>
-              <button type="submit" className="signin-btn">
-                Sign Up
-              </button>
-            </form>
+            {/* Sign-Up Form */}
+            {isSignUp && (
+              <form onSubmit={handleSubmit} className="auth-form sign-up-form">
+                <h2>Sign Up</h2>
+                <div className="form-group">
+                  <label htmlFor="username">Username:</label>
+                  <input
+                    name="username"
+                    onChange={handleChange}
+                    type="text"
+                    id="username"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email:</label>
+                  <input
+                    name="email"
+                    onChange={handleChange}
+                    type="email"
+                    id="email"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="password">Password:</label>
+                  <input
+                    name="password"
+                    onChange={handleChange}
+                    type="password"
+                    id="password"
+                    required
+                  />
+                </div>
+                <button type="submit" className="signin-btn">
+                  Sign Up
+                </button>
+              </form>
+            )}
           </div>
           <div className="overlay-container">
             <div className="overlay">
