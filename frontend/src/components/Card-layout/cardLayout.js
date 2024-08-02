@@ -216,7 +216,7 @@
 
 // export default CardLayout;
 
-//2
+// 2
 import React, { useState } from "react";
 import Card from "../Card/card";
 import "./CardLayout.css";
