@@ -126,7 +126,6 @@ import {
   fetchUserDetailsById,
   deletePostById,
 } from "../api-helpers/helpers";
-import { useNavigate } from "react-router-dom";
 import "./Card.css";
 
 const Card = ({
@@ -140,12 +139,13 @@ const Card = ({
   locationUrl,
   onFavoriteToggle,
   onDelete,
+  isAdmin, // Add a prop to determine if the user is an admin
+  onAdminDelete, // Add a prop to handle admin delete action
 }) => {
   const mainImageUrl = image?.url || "https://placehold.co/600x400";
   const [isFavorite, setIsFavorite] = useState(false);
   const [userDetails, setUserDetails] = useState({});
   const [loggedInUserId, setLoggedInUserId] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -164,8 +164,7 @@ const Card = ({
   const handleFavoriteClick = () => {
     if (_id) {
       toggleFavorite(_id)
-        .then((data) => {
-          setIsFavorite(!isFavorite);
+        .then(() => {
           const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
           if (isFavorite) {
             localStorage.setItem(
@@ -178,6 +177,7 @@ const Card = ({
               JSON.stringify([...favorites, _id])
             );
           }
+          setIsFavorite(!isFavorite);
           if (onFavoriteToggle) {
             onFavoriteToggle();
           }
@@ -193,15 +193,19 @@ const Card = ({
       deletePostById(_id)
         .then(() => {
           if (onDelete) {
-            onDelete(_id); // Notify parent component to refresh the profile
+            onDelete(_id); // Notify parent component to refresh the list
           }
         })
         .catch((err) => console.error("Error deleting post:", err));
     }
   };
 
-  const handleEditClick = () => {
-    navigate(`/editPost/${_id}`);
+  const handleAdminDeleteClick = () => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      if (onAdminDelete) {
+        onAdminDelete(_id); // Notify parent component to refresh the list
+      }
+    }
   };
 
   return (
@@ -223,15 +227,17 @@ const Card = ({
         >
           {isFavorite ? "-" : "+"}
         </button>
-        {loggedInUserId === userId && (
-          <>
-            <MdEdit className="e-d-btn edit-button" onClick={handleEditClick} />
-
-            <MdDeleteForever
-              className="e-d-btn delete-button"
-              onClick={handleDeleteClick}
-            />
-          </>
+        {(loggedInUserId === userId || isAdmin) && (
+          <MdDeleteForever
+            className="delete-button"
+            onClick={handleDeleteClick}
+          />
+        )}
+        {loggedInUserId === userId && <MdEdit className="edit-button" />}
+        {onAdminDelete && (
+          <button className="delete-button" onClick={onAdminDelete}>
+            Delete
+          </button>
         )}
       </div>
       <div className="card-content">

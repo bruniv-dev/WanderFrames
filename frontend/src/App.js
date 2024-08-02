@@ -9,8 +9,10 @@ import SignIn from "./components/SignIn/signIn.js";
 import { useSelector } from "react-redux";
 import EditPost from "./components/EditPost/editPost.js";
 import ForgotPassword from "./components/ForgotPassword/forgotPassword.js";
-import ResetPassword from "./ResetPassword/resetPassword.js";
-
+import ResetPassword from "./components/ResetPassword/resetPassword.js";
+import PostActions from "./components/PostActions/postActions.js";
+import UserActions from "./components/UserActions/userActions.js";
+import UserProfile from "./components/UserProfile/userProfile.js";
 const App = () => {
   const isloggedIn = useSelector((state) => state.isloggedIn);
   console.log(isloggedIn);
@@ -19,6 +21,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userId" element={<UserProfile />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/inspirations" element={<Inspirations />} />
         <Route path="/favorites" element={<Favorites />} />
@@ -26,6 +29,8 @@ const App = () => {
         <Route path="/editPost/:postId" element={<EditPost />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/post-actions" element={<PostActions />} />
+        <Route path="/user-actions" element={<UserActions />} />
       </Routes>
     </Router>
   );

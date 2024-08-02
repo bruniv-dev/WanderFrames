@@ -122,44 +122,44 @@ export const getUserById = async (req, res) => {
 //   }
 // };
 
-//login
-export const login = async (req, res, next) => {
-  const { email, password } = req.body;
+// //login
+// export const login = async (req, res, next) => {
+//   const { email, password } = req.body;
 
-  // Validate input fields
-  if (!email && email.trim() === "" && !password && password.length < 6) {
-    return res.status(422).json({ message: "Invalid Data" });
-  }
+//   // Validate input fields
+//   if (!email && email.trim() === "" && !password && password.length < 6) {
+//     return res.status(422).json({ message: "Invalid Data" });
+//   }
 
-  let existingUser;
-  try {
-    existingUser = await User.findOne({ email });
-  } catch (err) {
-    return res.status(500).json({ message: "Error finding user" });
-  }
+//   let existingUser;
+//   try {
+//     existingUser = await User.findOne({ email });
+//   } catch (err) {
+//     return res.status(500).json({ message: "Error finding user" });
+//   }
 
-  if (!existingUser) {
-    return res
-      .status(404)
-      .json({ message: "No user found with the given email." });
-  }
+//   if (!existingUser) {
+//     return res
+//       .status(404)
+//       .json({ message: "No user found with the given email." });
+//   }
 
-  // Compare password
-  let isPasswordCorrect;
-  try {
-    isPasswordCorrect = compareSync(password, existingUser.password);
-  } catch (err) {
-    return res.status(500).json({ message: "Error comparing passwords" });
-  }
+//   // Compare password
+//   let isPasswordCorrect;
+//   try {
+//     isPasswordCorrect = compareSync(password, existingUser.password);
+//   } catch (err) {
+//     return res.status(500).json({ message: "Error comparing passwords" });
+//   }
 
-  if (!isPasswordCorrect) {
-    return res.status(400).json({ message: "Incorrect Password" });
-  }
+//   if (!isPasswordCorrect) {
+//     return res.status(400).json({ message: "Incorrect Password" });
+//   }
 
-  return res
-    .status(200)
-    .json({ id: existingUser._id, message: "Login Successful" });
-};
+//   return res
+//     .status(200)
+//     .json({ id: existingUser._id, message: "Login Successful" });
+// };
 
 // Delete a user and their posts
 export const deleteUser = async (req, res) => {
@@ -444,7 +444,15 @@ export const resetPassword = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-  const { name, email, password, securityQuestion, securityAnswer } = req.body;
+  const {
+    name,
+    email,
+    password,
+    securityQuestion,
+    securityAnswer,
+    isAdmin,
+    role,
+  } = req.body;
 
   try {
     // Ensure all required fields are provided
@@ -476,5 +484,65 @@ export const signup = async (req, res) => {
   } catch (err) {
     console.error("Error in signup controller:", err);
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// export const login = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     res.status(200).json({
+//       userId: user._id,
+//       isAdmin: user.isAdmin,
+//     });
+//   } catch (error) {
+//     console.error("Error during login:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  // // Validate input fields
+  // if (!email || email.trim() === "" || !password || password.length < 6) {
+  //   return res.status(422).json({ message: "Invalid data" });
+  // }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "No user found with the given email." });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Incorrect password" });
+    }
+
+    // Respond with user data
+    res.status(200).json({
+      userId: user._id,
+      isAdmin: user.isAdmin,
+      role: user.role,
+      message: "Login successful",
+    });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

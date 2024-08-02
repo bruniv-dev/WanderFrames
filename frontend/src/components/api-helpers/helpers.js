@@ -14,6 +14,20 @@ export const getAllPosts = async () => {
   }
 };
 
+export const getAllUsers = async () => {
+  try {
+    const res = await axios.get("/user");
+    if (res.status !== 200) {
+      console.log("Error Occurred");
+    }
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    throw error;
+  }
+};
+
 export const fetchUserDetailsById = async (userId) => {
   try {
     const response = await axios.get(`/user/${userId}`);
@@ -162,6 +176,16 @@ export const deletePostById = async (id) => {
   }
 };
 
+export const deleteUserById = async (id) => {
+  try {
+    const response = await axios.delete(`/user/${id}`);
+    return response.data; // Ensure this matches the API response structure
+  } catch (error) {
+    console.error("Error deleting post by ID:", error);
+    throw error;
+  }
+};
+
 // API call to delete user account
 export const deleteUserAccount = async (userId) => {
   try {
@@ -240,6 +264,16 @@ export const sendAuthRequest = async (signup, data) => {
     }
   } catch (error) {
     console.error("Error during authentication:", error.message);
+    throw error; // Propagate the error to handle it further if needed
+  }
+};
+
+export const loginUser = async (credentials) => {
+  try {
+    const response = await axios.post("/user/login/", credentials);
+    return response.data; // Return the data from the response
+  } catch (error) {
+    console.error("Error during authentication:", error);
     throw error; // Propagate the error to handle it further if needed
   }
 };

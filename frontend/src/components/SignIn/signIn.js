@@ -381,11 +381,11 @@
 // src/components/SignInSignUp/SignInSignUp.js
 import React, { useState, useEffect } from "react";
 import "./SignIn.css";
-import { sendAuthRequest } from "../api-helpers/helpers";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store";
 import { useNavigate } from "react-router-dom";
 import Header from "../Header/header";
+import { loginUser } from "../api-helpers/helpers";
 
 const SignInSignUp = () => {
   const dispatch = useDispatch();
@@ -414,28 +414,26 @@ const SignInSignUp = () => {
     setIsSignUp(!isSignUp);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const authAction = sendAuthRequest(isSignUp, inputs);
+    try {
+      const data = await loginUser(inputs); // Call the API helper function
+      const { userId, isAdmin, role } = data;
+      console.log(data);
 
-    authAction
-      .then((data) => {
-        if (isSignUp) {
-          alert("Sign-up successful! Please log in.");
-          setIsSignUp(false);
-        } else {
-          dispatch(authActions.login());
-          const userId = data.user ? data.user._id : data.id;
-          if (userId) {
-            localStorage.setItem("userId", userId);
-            navigate("/");
-          } else {
-            console.error("User ID not found in the response");
-          }
-        }
-      })
-      .catch((err) => console.log(err));
+      // Store userId and isAdmin status in localStorage
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("isAdmin", isAdmin.toString());
+      localStorage.setItem("role", role);
+
+      // Dispatch login action with isAdmin payload
+      dispatch(authActions.login({ isAdmin }));
+      navigate("/"); // Redirect to appropriate page
+    } catch (err) {
+      console.error("Login error:", err);
+      // Handle login error
+    }
   };
 
   const handleChange = (e) => {
