@@ -243,12 +243,47 @@ export const resetPassword = async (userId, oldPassword, newPassword) => {
   }
 };
 
+// export const sendAuthRequest = async (signup, data) => {
+//   const endpoint = signup ? "/user/signup/" : "/user/login/";
+
+//   try {
+//     const res = await axios.post(endpoint, {
+//       name: signup ? data.username : "", // Include name only if signing up
+//       email: data.email,
+//       password: data.password,
+//       securityQuestion: signup ? data.securityQuestion : undefined, // Include only if signing up
+//       securityAnswer: signup ? data.securityAnswer : undefined, // Include only if signing up
+//     });
+
+//     if (res.status === 200 || res.status === 201) {
+//       const resData = res.data;
+//       console.log("Authentication successful:", resData);
+//       return resData;
+//     } else {
+//       console.log("Unexpected status code:", res.status);
+//     }
+//   } catch (error) {
+//     console.error("Error during authentication:", error.message);
+//     throw error; // Propagate the error to handle it further if needed
+//   }
+// };
+
+// export const loginUser = async (credentials) => {
+//   try {
+//     const response = await axios.post("/user/login/", credentials);
+//     return response.data; // Return the data from the response
+//   } catch (error) {
+//     console.error("Error during authentication:", error);
+//     throw error; // Propagate the error to handle it further if needed
+//   }
+// };
+
 export const sendAuthRequest = async (signup, data) => {
   const endpoint = signup ? "/user/signup/" : "/user/login/";
 
   try {
     const res = await axios.post(endpoint, {
-      name: signup ? data.username : "", // Include name only if signing up
+      name: signup ? data.username : undefined, // Include name only if signing up
       email: data.email,
       password: data.password,
       securityQuestion: signup ? data.securityQuestion : undefined, // Include only if signing up
