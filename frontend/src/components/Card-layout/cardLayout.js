@@ -251,6 +251,7 @@ const CardLayout = ({
           _id={card._id}
           userId={card.user}
           image={card.image}
+          name={card.name}
           location={card.location}
           subLocation={card.subLocation}
           description={card.description}

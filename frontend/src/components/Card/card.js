@@ -487,6 +487,11 @@ const Card = ({
     navigate(`/editPost/${_id}`); // Navigate to the edit post page with the post ID
   };
 
+  const handleUsernameClick = (e) => {
+    e.stopPropagation(); // Prevent event propagation to the card container
+    navigate(`/userProfile/${userId}`); // Navigate to the user's profile page
+  };
+
   return (
     <div className="card-container" onClick={onCardClick}>
       <img className="main-image" src={mainImageUrl} alt="Main" />
@@ -497,7 +502,9 @@ const Card = ({
           alt="profilepic"
         />
         <div className="user-info">
-          <p className="username">{userDetails.name || "Unknown User"}</p>
+          <p className="username" onClick={handleUsernameClick}>
+            {userDetails.name || "Unknown User"}
+          </p>
           <p className="date">{new Date(date).toLocaleDateString()}</p>
         </div>
         {locationUrl && (
