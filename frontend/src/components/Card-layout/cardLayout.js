@@ -174,6 +174,8 @@
 
 // export default CardLayout;
 
+//1
+
 import React from "react";
 import Card from "../Card/card";
 import "./CardLayout.css";

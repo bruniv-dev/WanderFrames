@@ -18,13 +18,13 @@
   margin-left: 10px;
 }
 
-/* .profile-image {
+.profile-image-card {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgb(252, 163, 9);
-} */
+}
 
 .user-info {
   display: flex;

@@ -118,7 +118,7 @@
 // };
 
 // export default Card;
-
+//1
 import React, { useState, useEffect } from "react";
 import { MdLocationOn, MdDeleteForever, MdEdit } from "react-icons/md";
 import {
@@ -212,6 +212,7 @@ const Card = ({
     <div className="card-container">
       <img className="main-image" src={mainImageUrl} alt="Main" />
       <div className="card-header">
+        <img className="profile-image-card" src={userDetails.profileImage} />
         <div className="user-info">
           <p className="username">{userDetails.name || "Unknown User"}</p>
           <p className="date">{new Date(date).toLocaleDateString()}</p>
