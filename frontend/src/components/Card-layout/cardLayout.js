@@ -176,7 +176,48 @@
 
 //1
 
-import React from "react";
+// import React from "react";
+// import Card from "../Card/card";
+// import "./CardLayout.css";
+
+// const CardLayout = ({
+//   cardsData,
+//   onFavoriteToggle,
+//   onDelete,
+//   onAdminDelete,
+// }) => {
+//   if (!cardsData || !Array.isArray(cardsData)) {
+//     return <div>No cards available.</div>;
+//   }
+
+//   console.log("Cards Data:", cardsData); // Debug log to check data structure
+
+//   return (
+//     <div className="card-layout">
+//       {cardsData.map((card) => (
+//         <Card
+//           key={card._id}
+//           _id={card._id}
+//           userId={card.user}
+//           image={card.image}
+//           location={card.location}
+//           subLocation={card.subLocation}
+//           description={card.description}
+//           date={card.date}
+//           locationUrl={card.locationUrl}
+//           onFavoriteToggle={onFavoriteToggle}
+//           onDelete={onDelete}
+//           onAdminDelete={onAdminDelete ? () => onAdminDelete(card._id) : null}
+//         />
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default CardLayout;
+
+//2
+import React, { useState } from "react";
 import Card from "../Card/card";
 import "./CardLayout.css";
 
@@ -186,6 +227,16 @@ const CardLayout = ({
   onDelete,
   onAdminDelete,
 }) => {
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  const openModal = (card) => {
+    setSelectedCard(card);
+  };
+
+  const closeModal = () => {
+    setSelectedCard(null);
+  };
+
   if (!cardsData || !Array.isArray(cardsData)) {
     return <div>No cards available.</div>;
   }
@@ -208,8 +259,30 @@ const CardLayout = ({
           onFavoriteToggle={onFavoriteToggle}
           onDelete={onDelete}
           onAdminDelete={onAdminDelete ? () => onAdminDelete(card._id) : null}
+          onCardClick={() => openModal(card)}
         />
       ))}
+
+      {selectedCard && (
+        <div className="modal-backdrop" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close-button" onClick={closeModal}>
+              &times;
+            </span>
+            <img
+              className="modal-image"
+              src={selectedCard.image?.url || "https://placehold.co/600x400"}
+              alt="Main"
+            />
+            <h2>Card Details</h2>
+            <p>Location: {selectedCard.location}</p>
+            <p>Sub Location: {selectedCard.subLocation}</p>
+            <p>Description: {selectedCard.description}</p>
+            <p>Date: {new Date(selectedCard.date).toLocaleDateString()}</p>
+            {/* Add more details as needed */}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
