@@ -101,10 +101,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  role: {
-    type: String,
-    default: "user",
-  },
+
   resetToken: String,
   resetTokenExpiration: Date,
 });

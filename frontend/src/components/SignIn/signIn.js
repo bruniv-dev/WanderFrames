@@ -856,7 +856,7 @@ const SignInSignUp = () => {
         console.log("Sign-up successful:", data);
         toggleForm(); // Switch to login mode after successful sign-up
       } else {
-        const { userId, isAdmin, role } = data || {}; // Ensure data is defined
+        const { userId, isAdmin } = data || {}; // Ensure data is defined
 
         // Store userId and isAdmin status in localStorage if they exist
         if (userId) {
@@ -864,9 +864,6 @@ const SignInSignUp = () => {
         }
         if (isAdmin !== undefined) {
           localStorage.setItem("isAdmin", isAdmin.toString());
-        }
-        if (role) {
-          localStorage.setItem("role", role);
         }
 
         // Dispatch login action with isAdmin payload if isAdmin is defined

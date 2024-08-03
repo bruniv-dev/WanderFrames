@@ -476,6 +476,8 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       securityQuestion,
       securityAnswer,
+      isAdmin,
+      role,
     });
 
     await user.save();
@@ -544,5 +546,29 @@ export const login = async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Update user isADMIB
+export const updateUserIsAdmin = async (req, res) => {
+  const { userId } = req.params;
+  const { isAdmin } = req.body;
+
+  try {
+    // Find user by ID and update the role
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { isAdmin },
+      { new: true } // Return the updated document
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };

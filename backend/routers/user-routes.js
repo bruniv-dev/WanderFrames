@@ -16,6 +16,7 @@ import {
   requestReset,
   resetPassword,
   verifySecurityAnswer,
+  updateUserIsAdmin,
 } from "../controllers/user-controllers.js";
 
 const upload = multer({ dest: "uploads/" }); // Configure multer
@@ -46,6 +47,7 @@ userRouter.get("/posts/:userId", getUserPosts);
 userRouter.get("/:userId", getUserById);
 userRouter.delete("/:id", deleteUserAccount);
 userRouter.put("/:userId", upload.single("profileImage"), updateUserProfile);
+userRouter.put("/:userId/isAdmin", updateUserIsAdmin);
 userRouter.post("/requestReset", requestReset);
 userRouter.post("/verifySecurityAnswer", verifySecurityAnswer);
 userRouter.post("/reset-password/:userId", resetPassword);

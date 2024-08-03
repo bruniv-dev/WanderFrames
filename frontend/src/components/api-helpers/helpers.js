@@ -312,3 +312,14 @@ export const loginUser = async (credentials) => {
     throw error; // Propagate the error to handle it further if needed
   }
 };
+export const updateUserIsAdmin = async (userId, isAdmin) => {
+  try {
+    const response = await axios.put(`/user/${userId}/isAdmin`, {
+      isAdmin,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    throw error;
+  }
+};
