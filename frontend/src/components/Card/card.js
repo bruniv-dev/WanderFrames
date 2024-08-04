@@ -838,7 +838,11 @@ const Card = ({
         />
         <div className="user-info">
           <p className="username" onClick={handleUsernameClick}>
-            {userDetails.name || "Unknown User"}
+            {userDetails.username || "Unknown User"}
+          </p>
+          <p className="name">
+            {`${userDetails.firstName} ${userDetails.lastName}` ||
+              "Unknown User"}
           </p>
           <p className="date">{new Date(date).toLocaleDateString()}</p>
         </div>

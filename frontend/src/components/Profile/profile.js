@@ -469,14 +469,17 @@ const Profile = () => {
         classNamesignin="profile-signin"
       />
       <div className="profile-container">
-        <h1>Profile</h1>
+        <h1>{`${user.username}'s Profile`}</h1>
         {user ? (
           <div className="profile-details">
             <div className="profile-image">
               <img src={user.profileImage} alt="Profile" />
             </div>
             <div className="profile-info">
-              <h2>{user.name}</h2>
+              <h2>{user.username}</h2>
+              <h3
+                style={{ color: "gray" }}
+              >{`${user.firstName} ${user.lastName}`}</h3>
               <p>Email: {user.email}</p>
               <p>
                 Bio: {user.bio || "Hi, I'm excited to share my travel diaries."}

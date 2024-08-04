@@ -87,7 +87,9 @@ import "./userCard.css";
 
 const UserCard = ({
   userId,
-  name,
+  username,
+  lastName,
+  firstName,
   createdAt,
   email,
   bio,
@@ -118,8 +120,9 @@ const UserCard = ({
           onClick={handleUsernameClick}
           style={{ cursor: "pointer", color: "blue" }}
         >
-          {name}
+          {username}
         </p>
+        <p className="name">{`${firstName} ${lastName}`}</p>
         <p className="role" style={{ color: isAdmin ? "red" : "black" }}>
           Role: {isAdmin ? "Admin" : "User"}
         </p>

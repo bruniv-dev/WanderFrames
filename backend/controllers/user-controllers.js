@@ -443,20 +443,133 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+// export const signup = async (req, res) => {
+//   const {
+//     name,
+//     email,
+//     password,
+//     securityQuestion,
+//     securityAnswer,
+//     isAdmin,
+//     role,
+//   } = req.body;
+
+//   try {
+//     // Ensure all required fields are provided
+//     if (!name || !email || !password || !securityQuestion || !securityAnswer) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+
+//     // Check if user already exists
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return res.status(409).json({ message: "User already exists" });
+//     }
+
+//     // Hash the password
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Create a new user
+//     const user = new User({
+//       name,
+//       email,
+//       password: hashedPassword,
+//       securityQuestion,
+//       securityAnswer,
+//       isAdmin,
+//       role,
+//     });
+
+//     await user.save();
+
+//     return res.status(201).json({ message: "User created successfully" });
+//   } catch (err) {
+//     console.error("Error in signup controller:", err);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+// export const signup = async (req, res) => {
+//   const {
+//     firstName,
+//     lastName,
+//     username,
+//     email,
+//     password,
+//     securityQuestion,
+//     securityAnswer,
+//     isAdmin,
+//     role,
+//   } = req.body;
+
+//   try {
+//     // Ensure all required fields are provided
+//     if (
+//       !firstName ||
+//       !lastName ||
+//       !username ||
+//       !email ||
+//       !password ||
+//       !securityQuestion ||
+//       !securityAnswer
+//     ) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+
+//     // Check if user already exists
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
+
+//     // Hash the password
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Create a new user
+//     const user = new User({
+//       firstName,
+//       lastName,
+//       username,
+//       email,
+//       password: hashedPassword,
+//       securityQuestion,
+//       securityAnswer,
+//       isAdmin,
+//       role,
+//     });
+
+//     await user.save();
+
+//     return res.status(201).json({ message: "User created successfully" });
+//   } catch (err) {
+//     console.error("Error in signup controller:", err);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
 export const signup = async (req, res) => {
   const {
-    name,
+    firstName,
+    lastName,
+    username,
     email,
     password,
     securityQuestion,
     securityAnswer,
-    isAdmin,
-    role,
+    isAdmin = false,
   } = req.body;
 
   try {
-    // Ensure all required fields are provided
-    if (!name || !email || !password || !securityQuestion || !securityAnswer) {
+    // Validate all required fields
+    if (
+      !firstName ||
+      !lastName ||
+      !username ||
+      !email ||
+      !password ||
+      !securityQuestion ||
+      !securityAnswer
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -471,13 +584,14 @@ export const signup = async (req, res) => {
 
     // Create a new user
     const user = new User({
-      name,
+      firstName,
+      lastName,
+      username,
       email,
       password: hashedPassword,
       securityQuestion,
       securityAnswer,
       isAdmin,
-      role,
     });
 
     await user.save();
@@ -489,37 +603,8 @@ export const signup = async (req, res) => {
   }
 };
 
-// export const login = async (req, res) => {
-//   const { email, password } = req.body;
-
-//   try {
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//       return res.status(401).json({ message: "Invalid email or password" });
-//     }
-
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) {
-//       return res.status(401).json({ message: "Invalid email or password" });
-//     }
-
-//     res.status(200).json({
-//       userId: user._id,
-//       isAdmin: user.isAdmin,
-//     });
-//   } catch (error) {
-//     console.error("Error during login:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
-
-  // // Validate input fields
-  // if (!email || email.trim() === "" || !password || password.length < 6) {
-  //   return res.status(422).json({ message: "Invalid data" });
-  // }
 
   try {
     // Find the user by email
@@ -533,14 +618,13 @@ export const login = async (req, res) => {
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Incorrect password" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
     // Respond with user data
     res.status(200).json({
       userId: user._id,
       isAdmin: user.isAdmin,
-      role: user.role,
       message: "Login successful",
     });
   } catch (error) {

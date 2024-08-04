@@ -82,7 +82,9 @@ const Favorites = () => {
         fetchUserDetailsById(favorite.user)
           .then((user) => ({
             ...favorite,
-            userName: user.name || "Unknown", // Set userName to "Unknown" if not available
+            userName: user.username || "Unknown",
+            lastName: user.lastName || "Unknown",
+            firstName: user.firstName || "Unknown", // Set userName to "Unknown" if not available
           }))
           .catch(() => ({
             ...favorite,
@@ -110,11 +112,15 @@ const Favorites = () => {
     const lowercasedTerm = term.toLowerCase();
     const filtered = favorites.filter((favorite) => {
       const userName = favorite.userName || ""; // Ensure userName exists
+      const firstName = favorite.firstName || "";
+      const lastName = favorite.lastName || "";
       const location = favorite.location || "";
       const subLocation = favorite.subLocation || "";
 
       return (
         userName.toLowerCase().includes(lowercasedTerm) ||
+        lastName.toLowerCase().includes(lowercasedTerm) ||
+        firstName.toLowerCase().includes(lowercasedTerm) ||
         location.toLowerCase().includes(lowercasedTerm) ||
         subLocation.toLowerCase().includes(lowercasedTerm)
       );

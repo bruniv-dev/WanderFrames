@@ -84,7 +84,9 @@ const Inspirations = () => {
               const user = await fetchUserDetailsById(post.user);
               return {
                 ...post,
-                userName: user.name || "Unknown", // Set userName to "Unknown" if not available
+                userName: user.username || "Unknown",
+                lastName: user.lastName || "Unknown",
+                firstName: user.firstName || "Unknown", // Set userName to "Unknown" if not available
               };
             } catch {
               return {
@@ -106,9 +108,12 @@ const Inspirations = () => {
       const userName = card.userName || ""; // Ensure userName exists
       const location = card.location || "";
       const subLocation = card.subLocation || "";
-
+      const firstName = card.firstName || "";
+      const lastName = card.lastName || "";
       return (
         userName.toLowerCase().includes(lowercasedTerm) ||
+        firstName.toLowerCase().includes(lowercasedTerm) ||
+        lastName.toLowerCase().includes(lowercasedTerm) ||
         location.toLowerCase().includes(lowercasedTerm) ||
         subLocation.toLowerCase().includes(lowercasedTerm)
       );

@@ -295,7 +295,9 @@ const UserActions = () => {
       setFilteredUsers(
         usersData.filter(
           (user) =>
-            user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (searchQuery.toLowerCase() === "admin" && user.isAdmin) ||
@@ -331,7 +333,15 @@ const UserActions = () => {
           setFilteredUsers(
             updatedUsers.filter(
               (user) =>
-                user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                user.username
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                user.firstName
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                user.lastName
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
                 user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 user._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (searchQuery.toLowerCase() === "admin" && user.isAdmin) ||
@@ -360,7 +370,15 @@ const UserActions = () => {
           setFilteredUsers(
             updatedUsers.filter(
               (user) =>
-                user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                user.username
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                user.firstName
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                user.lastName
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
                 user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 user._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (searchQuery.toLowerCase() === "admin" && user.isAdmin) ||
@@ -391,7 +409,7 @@ const UserActions = () => {
       <div className="action-button">
         <input
           type="text"
-          placeholder="Search by name, email, user ID, or 'admin'/'user'"
+          placeholder="Search by username, firstname, lastname, email, user ID, or 'admin'/'user'"
           value={searchQuery}
           onChange={handleSearchChange}
         />
@@ -402,7 +420,9 @@ const UserActions = () => {
           <UserCard
             key={user._id}
             userId={user._id}
-            name={user.name}
+            username={user.username}
+            firstName={user.firstName}
+            lastName={user.lastName}
             createdAt={user.createdAt}
             email={user.email}
             bio={user.bio}
