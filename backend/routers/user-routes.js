@@ -13,10 +13,12 @@ import {
   getUserById,
   deleteUserAccount,
   updateUserProfile,
-  requestReset,
-  resetPassword,
   verifySecurityAnswer,
+  resetPassword,
   updateUserIsAdmin,
+  checkUsernameAvailability,
+  requestReset,
+  forgotPasswordReset,
 } from "../controllers/user-controllers.js";
 
 const upload = multer({ dest: "uploads/" }); // Configure multer
@@ -50,6 +52,8 @@ userRouter.put("/:userId", upload.single("profileImage"), updateUserProfile);
 userRouter.put("/:userId/isAdmin", updateUserIsAdmin);
 userRouter.post("/requestReset", requestReset);
 userRouter.post("/verifySecurityAnswer", verifySecurityAnswer);
+userRouter.post("/forgot-password-reset/:userId", forgotPasswordReset);
 userRouter.post("/reset-password/:userId", resetPassword);
+userRouter.get("/check-username/:username", checkUsernameAvailability);
 
 export default userRouter;

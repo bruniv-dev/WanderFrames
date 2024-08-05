@@ -213,36 +213,70 @@ export const updateUserProfile = async (userId, formData) => {
   }
 };
 
-// Request security question and reset token
-export const sendResetPasswordRequest = async (email) => {
-  const response = await axios.post("http://localhost:5000/user/requestReset", {
-    email,
-  });
-  return response.data;
-};
+// // Request security question and reset token
+// export const sendResetPasswordRequest = async (email) => {
+//   const response = await axios.post("http://localhost:5000/user/requestReset", {
+//     email,
+//   });
+//   return response.data;
+// };
 
-// Verify security answer
-export const verifySecurityAnswer = async (email, securityAnswer) => {
-  const response = await axios.post(
-    "http://localhost:5000/user/verifySecurityAnswer",
-    { email, securityAnswer }
-  );
-  return response.data;
-};
+// // Verify security answer
+// export const verifySecurityAnswer = async (email, securityAnswer) => {
+//   const response = await axios.post(
+//     "http://localhost:5000/user/verifySecurityAnswer",
+//     { email, securityAnswer }
+//   );
+//   return response.data;
+// };
 
-export const resetPassword = async (userId, oldPassword, newPassword) => {
-  try {
-    const response = await axios.post(`/user/reset-password/${userId}`, {
-      oldPassword,
-      newPassword,
-    });
-    return response.data;
-  } catch (err) {
-    console.error("Error resetting password:", err);
-    throw err;
-  }
-};
+// export const resetPassword = async (userId, oldPassword, newPassword) => {
+//   try {
+//     const response = await axios.post(`/user/reset-password/${userId}`, {
+//       oldPassword,
+//       newPassword,
+//     });
+//     return response.data;
+//   } catch (err) {
+//     console.error("Error resetting password:", err);
+//     throw err;
+//   }
+// };
+// export const sendResetPasswordRequest = async (identifier) => {
+//   try {
+//     const response = await axios.post("/user/request-reset-password", {
+//       identifier,
+//     });
+//     return response.data;
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 
+// export const verifySecurityAnswer = async (identifier, securityAnswer) => {
+//   try {
+//     const response = await axios.post("/user/verify-security-answer", {
+//       identifier,
+//       securityAnswer,
+//     });
+//     return response.data;
+//   } catch (err) {
+//     throw err;
+//   }
+// };
+
+// export const resetPassword = async (userId, oldPassword, newPassword) => {
+//   try {
+//     const response = await axios.post(`/user/reset-password/${userId}`, {
+//       oldPassword,
+//       newPassword,
+//     });
+//     return response.data;
+//   } catch (err) {
+//     console.error("Error resetting password:", err);
+//     throw err;
+//   }
+// };
 // export const sendAuthRequest = async (signup, data) => {
 //   const endpoint = signup ? "/user/signup/" : "/user/login/";
 
@@ -303,22 +337,61 @@ export const resetPassword = async (userId, oldPassword, newPassword) => {
 //   }
 // };
 
+// export const sendAuthRequest = async (signup, data) => {
+//   const endpoint = signup ? "/user/signup/" : "/user/login/";
+
+//   // Construct the payload based on whether it's a signup or login request
+//   const payload = {
+//     email: data.email,
+//     password: data.password,
+//   };
+
+//   if (signup) {
+//     payload.firstName = data.firstName;
+//     payload.lastName = data.lastName;
+//     payload.username = data.username;
+//     payload.securityQuestion = data.securityQuestion;
+//     payload.securityAnswer = data.securityAnswer;
+//   }
+
+//   try {
+//     const res = await axios.post(endpoint, payload);
+
+//     if (res.status === 200 || res.status === 201) {
+//       const resData = res.data;
+//       console.log("Authentication successful:", resData);
+//       return resData;
+//     } else {
+//       console.log("Unexpected status code:", res.status);
+//       throw new Error(`Unexpected status code: ${res.status}`);
+//     }
+//   } catch (error) {
+//     console.error(
+//       "Error during authentication:",
+//       error.response ? error.response.data : error.message
+//     );
+//     throw error;
+//   }
+// };
+
 export const sendAuthRequest = async (signup, data) => {
   const endpoint = signup ? "/user/signup/" : "/user/login/";
 
   // Construct the payload based on whether it's a signup or login request
-  const payload = {
-    email: data.email,
-    password: data.password,
-  };
-
-  if (signup) {
-    payload.firstName = data.firstName;
-    payload.lastName = data.lastName;
-    payload.username = data.username;
-    payload.securityQuestion = data.securityQuestion;
-    payload.securityAnswer = data.securityAnswer;
-  }
+  const payload = signup
+    ? {
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        username: data.username,
+        securityQuestion: data.securityQuestion,
+        securityAnswer: data.securityAnswer,
+      }
+    : {
+        identifier: data.identifier, // Use identifier for either username or email
+        password: data.password,
+      };
 
   try {
     const res = await axios.post(endpoint, payload);
@@ -359,4 +432,59 @@ export const updateUserIsAdmin = async (userId, isAdmin) => {
     console.error("Error updating user role:", error);
     throw error;
   }
+};
+
+export const checkUsernameAvailability = async (username) => {
+  try {
+    const response = await axios.get(`user/check-username/${username}`);
+    return response.data.isAvailable;
+  } catch (error) {
+    console.error("Error checking username availability:", error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (userId, oldPassword, newPassword) => {
+  const response = await axios.post(`/user/reset-password/${userId}`, {
+    oldPassword,
+    newPassword,
+  });
+  return response.data;
+};
+
+// export const sendResetPasswordRequest = async (identifier) => {
+//   const response = await axios.post("/user/requestReset", { identifier });
+//   return response.data;
+// };
+
+export const sendResetPasswordRequest = async (identifier) => {
+  try {
+    const response = await axios.post("/user/requestReset", { identifier });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.error(
+        "Error requesting password reset:",
+        error.response.data.message
+      );
+      throw new Error(error.response.data.message); // Throw custom error message for 404
+    }
+    console.error("Error requesting password reset:", error);
+    throw new Error("Failed to request password reset"); // General error message for other errors
+  }
+};
+
+export const verifySecurityAnswer = async (identifier, securityAnswer) => {
+  const response = await axios.post("/user/verifySecurityAnswer", {
+    identifier,
+    securityAnswer,
+  });
+  return response.data;
+};
+
+export const forgotPasswordReset = async (userId, newPassword) => {
+  const response = await axios.post(`/user/forgot-password-reset/${userId}`, {
+    newPassword,
+  });
+  return response.data;
 };

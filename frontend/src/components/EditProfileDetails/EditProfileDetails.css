@@ -51,3 +51,27 @@
 button {
   margin-right: 10px;
 }
+
+/* EditProfileDetails.css */
+
+.username-status-message {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.username-status-message.available {
+  color: green;
+}
+
+.username-status-message.taken {
+  color: red;
+}
+
+.username-status-message.error {
+  color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+}

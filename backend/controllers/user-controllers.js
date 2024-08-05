@@ -40,127 +40,6 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// // Signup Controller
-// export const signup = async (req, res) => {
-//   const { name, email, password } = req.body;
-
-//   // Validate input fields
-//   if (
-//     !name ||
-//     name.trim() === "" ||
-//     !email ||
-//     email.trim() === "" ||
-//     !password ||
-//     password.length < 6
-//   ) {
-//     return res.status(422).json({ message: "Invalid Data" });
-//   }
-
-//   // Hash the password using bcrypt
-//   const saltRounds = 10;
-//   const hashedPassword = hashSync(password, saltRounds);
-
-//   try {
-//     // Create a new user instance with the hashed password and current date
-//     const user = new User({
-//       name,
-//       email,
-//       password: hashedPassword,
-//       createdAt: new Date(), // Add the current date when creating a new user
-//     });
-
-//     // Save the user to the database
-//     await user.save();
-
-//     // Send a success response with the created user
-//     return res.status(201).json({ user });
-//   } catch (err) {
-//     console.error("Error creating user:", err);
-//     return res.status(500).json({ message: "Unexpected Error Occurred" });
-//   }
-// };
-
-// import bcrypt from "bcrypt";
-
-// export const signup = async (req, res) => {
-//   const { name, email, password, isAdmin } = req.body;
-
-//   // Validate input fields
-//   if (
-//     !name ||
-//     name.trim() === "" ||
-//     !email ||
-//     email.trim() === "" ||
-//     !password ||
-//     password.length < 6
-//   ) {
-//     return res.status(422).json({ message: "Invalid Data" });
-//   }
-
-//   // Hash the password using bcrypt
-//   const saltRounds = 10;
-//   const hashedPassword = bcrypt.hashSync(password, saltRounds);
-
-//   try {
-//     // Create a new user instance with the hashed password and current date
-//     const user = new User({
-//       name,
-//       email,
-//       password: hashedPassword,
-//       createdAt: new Date(), // Add the current date when creating a new user
-//       isAdmin: isAdmin || false, // Default to false if not provided
-//     });
-
-//     // Save the user to the database
-//     await user.save();
-
-//     // Send a success response with the created user
-//     return res.status(201).json({ user });
-//   } catch (err) {
-//     console.error("Error creating user:", err);
-//     return res.status(500).json({ message: "Unexpected Error Occurred" });
-//   }
-// };
-
-// //login
-// export const login = async (req, res, next) => {
-//   const { email, password } = req.body;
-
-//   // Validate input fields
-//   if (!email && email.trim() === "" && !password && password.length < 6) {
-//     return res.status(422).json({ message: "Invalid Data" });
-//   }
-
-//   let existingUser;
-//   try {
-//     existingUser = await User.findOne({ email });
-//   } catch (err) {
-//     return res.status(500).json({ message: "Error finding user" });
-//   }
-
-//   if (!existingUser) {
-//     return res
-//       .status(404)
-//       .json({ message: "No user found with the given email." });
-//   }
-
-//   // Compare password
-//   let isPasswordCorrect;
-//   try {
-//     isPasswordCorrect = compareSync(password, existingUser.password);
-//   } catch (err) {
-//     return res.status(500).json({ message: "Error comparing passwords" });
-//   }
-
-//   if (!isPasswordCorrect) {
-//     return res.status(400).json({ message: "Incorrect Password" });
-//   }
-
-//   return res
-//     .status(200)
-//     .json({ id: existingUser._id, message: "Login Successful" });
-// };
-
 // Delete a user and their posts
 export const deleteUser = async (req, res) => {
   const id = req.params.id;
@@ -304,38 +183,11 @@ export const deleteUserAccount = async (req, res) => {
   }
 };
 
-// export const updateUserProfile = async (req, res) => {
-//   const { userId } = req.params;
-//   const { bio, name } = req.body;
-//   const profileImage = req.file?.path; // Assuming you're using multer for file uploads
-
-//   try {
-//     const user = await User.findById(userId);
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     if (bio) user.bio = bio;
-//     if (name) user.name = name;
-//     // if (profileImage) user.profileImage = profileImage;
-
-//     if (profileImage) {
-//       user.profileImage = profileImage.replace(/\\/g, "/"); // Normalize path
-//     }
-//     await user.save();
-
-//     res.json({ message: "Profile updated successfully", user });
-//   } catch (error) {
-//     console.error("Error updating user profile:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-
 const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
 export const updateUserProfile = async (req, res) => {
   const { userId } = req.params;
-  const { bio, name } = req.body;
+  const { bio, username, firstName, lastName } = req.body;
   const profileImage = req.file ? req.file.path : "";
   const profileImageUrl = profileImage
     ? `${baseUrl}/uploads/${path.basename(profileImage)}`
@@ -348,7 +200,9 @@ export const updateUserProfile = async (req, res) => {
     }
 
     if (bio) user.bio = bio;
-    if (name) user.name = name;
+    if (username) user.username = username;
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
     // if (profileImage) user.profileImage = profileImage;
     if (profileImage) user.profileImage = profileImageUrl;
 
@@ -363,189 +217,6 @@ export const updateUserProfile = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-const generateResetToken = () => {
-  return crypto.randomBytes(32).toString("hex");
-};
-
-export const requestReset = async (req, res) => {
-  try {
-    const { email } = req.body;
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Generate a reset token and save it to the user
-    const resetToken = generateResetToken();
-    user.resetToken = resetToken;
-    user.resetTokenExpiration = Date.now() + 3600000; // 1 hour expiration
-    await user.save();
-
-    // Return the security question and reset token
-    res.json({
-      securityQuestion: user.securityQuestion,
-      resetToken,
-    });
-  } catch (error) {
-    console.error("Error in requestReset controller:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-// Verify the security answer
-export const verifySecurityAnswer = async (req, res) => {
-  const { email, securityAnswer } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Check if the security answer matches
-    const isCorrect = user.securityAnswer === securityAnswer;
-
-    return res.status(200).json({ isCorrect });
-  } catch (err) {
-    console.error("Error in verifySecurityAnswer controller:", err);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-// Reset the password
-
-export const resetPassword = async (req, res) => {
-  const { userId } = req.params; // Ensure this line correctly extracts userId from request parameters
-  const { oldPassword, newPassword } = req.body;
-
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Incorrect old password" });
-    }
-
-    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
-    user.password = hashedNewPassword;
-    await user.save();
-
-    res.status(200).json({ message: "Password reset successful" });
-  } catch (err) {
-    console.error("Error resetting password:", err);
-    res.status(500).json({ message: "Failed to reset password" });
-  }
-};
-
-// export const signup = async (req, res) => {
-//   const {
-//     name,
-//     email,
-//     password,
-//     securityQuestion,
-//     securityAnswer,
-//     isAdmin,
-//     role,
-//   } = req.body;
-
-//   try {
-//     // Ensure all required fields are provided
-//     if (!name || !email || !password || !securityQuestion || !securityAnswer) {
-//       return res.status(400).json({ message: "All fields are required" });
-//     }
-
-//     // Check if user already exists
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(409).json({ message: "User already exists" });
-//     }
-
-//     // Hash the password
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     // Create a new user
-//     const user = new User({
-//       name,
-//       email,
-//       password: hashedPassword,
-//       securityQuestion,
-//       securityAnswer,
-//       isAdmin,
-//       role,
-//     });
-
-//     await user.save();
-
-//     return res.status(201).json({ message: "User created successfully" });
-//   } catch (err) {
-//     console.error("Error in signup controller:", err);
-//     return res.status(500).json({ message: "Internal server error" });
-//   }
-// };
-
-// export const signup = async (req, res) => {
-//   const {
-//     firstName,
-//     lastName,
-//     username,
-//     email,
-//     password,
-//     securityQuestion,
-//     securityAnswer,
-//     isAdmin,
-//     role,
-//   } = req.body;
-
-//   try {
-//     // Ensure all required fields are provided
-//     if (
-//       !firstName ||
-//       !lastName ||
-//       !username ||
-//       !email ||
-//       !password ||
-//       !securityQuestion ||
-//       !securityAnswer
-//     ) {
-//       return res.status(400).json({ message: "All fields are required" });
-//     }
-
-//     // Check if user already exists
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ message: "User already exists" });
-//     }
-
-//     // Hash the password
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     // Create a new user
-//     const user = new User({
-//       firstName,
-//       lastName,
-//       username,
-//       email,
-//       password: hashedPassword,
-//       securityQuestion,
-//       securityAnswer,
-//       isAdmin,
-//       role,
-//     });
-
-//     await user.save();
-
-//     return res.status(201).json({ message: "User created successfully" });
-//   } catch (err) {
-//     console.error("Error in signup controller:", err);
-//     return res.status(500).json({ message: "Internal server error" });
-//   }
-// };
 
 export const signup = async (req, res) => {
   const {
@@ -573,9 +244,15 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    // Check if username is already taken
+    const existingUserByUsername = await User.findOne({ username });
+    if (existingUserByUsername) {
+      return res.status(400).json({ message: "Username already taken" });
+    }
+
+    // Check if email is already taken
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail) {
       return res.status(400).json({ message: "User already exists" });
     }
 
@@ -604,15 +281,17 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { identifier, password } = req.body; // Renamed to `identifier` to handle both username and email
 
   try {
-    // Find the user by email
-    const user = await User.findOne({ email });
+    // Find the user by username or email
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
     if (!user) {
       return res
         .status(404)
-        .json({ message: "No user found with the given email." });
+        .json({ message: "No user found with the given username or email." });
     }
 
     // Compare password
@@ -654,5 +333,131 @@ export const updateUserIsAdmin = async (req, res) => {
   } catch (error) {
     console.error("Error updating user role:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const checkUsernameAvailability = async (req, res) => {
+  const { username } = req.params;
+
+  if (!username) {
+    return res.status(400).json({ message: "Username is required" });
+  }
+
+  try {
+    const user = await User.findOne({ username });
+    if (user) {
+      return res.json({ isAvailable: false });
+    } else {
+      return res.json({ isAvailable: true });
+    }
+  } catch (err) {
+    console.error("Error checking username availability:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Request password reset
+export const requestReset = async (req, res) => {
+  try {
+    const { identifier } = req.body; // Change from email to identifier
+
+    if (!identifier) {
+      return res.status(400).json({ message: "Username or Email is required" });
+    }
+
+    // Find user by email or username
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return the security question and user ID
+    res.json({
+      securityQuestion: user.securityQuestion,
+      userId: user._id,
+    });
+  } catch (error) {
+    console.error("Error in requestReset controller:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Verify the security answer
+export const verifySecurityAnswer = async (req, res) => {
+  const { identifier, securityAnswer } = req.body;
+
+  try {
+    // Find user by email or username
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Invalid username or email" });
+    }
+
+    const isCorrect = user.securityAnswer === securityAnswer;
+    return res.status(200).json({ isCorrect });
+  } catch (err) {
+    console.error("Error in verifySecurityAnswer controller:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Reset the password after forgotten
+export const forgotPasswordReset = async (req, res) => {
+  const { userId } = req.params;
+  const { newPassword } = req.body;
+
+  console.log(`Received request to reset password for user ID: ${userId}`);
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log("User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    console.log("Password reset successful");
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("Error resetting password:", err);
+    res.status(500).json({ message: "Failed to reset password" });
+  }
+};
+
+// Reset password for logged-in users
+export const resetPassword = async (req, res) => {
+  const { userId } = req.params;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found. Invalid username or password" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Incorrect old password" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("Error resetting password:", err);
+    res.status(500).json({ message: "Failed to reset password" });
   }
 };
