@@ -111,8 +111,8 @@ const userSchema = new Schema({
     required: true,
   },
 
-  resetToken: String,
-  resetTokenExpiration: Date,
+  // resetToken: String,
+  // resetTokenExpiration: Date,
 });
 
 export default model("User", userSchema);

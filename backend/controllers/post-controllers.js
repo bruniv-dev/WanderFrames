@@ -39,13 +39,56 @@ export const getPostById = async (req, res) => {
 // Define the base URL
 const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
+// export const addPost = async (req, res, next) => {
+//   const { subLocation, description, location, date, user, locationUrl } =
+//     req.body;
+//   const imagePath = req.file ? req.file.path : "";
+//   const imageUrl = imagePath
+//     ? `${baseUrl}/uploads/${path.basename(imagePath)}`
+//     : "";
+
+//   let post;
+//   try {
+//     post = new Post({
+//       subLocation,
+//       description,
+//       location,
+//       date: new Date(date),
+//       user,
+//       image: {
+//         url: imageUrl,
+//       },
+//       locationUrl, // Add this line
+//     });
+
+//     const session = await mongoose.startSession();
+//     session.startTransaction();
+//     const existingUser = await User.findById(user);
+//     existingUser.posts.push(post);
+//     await existingUser.save({ session });
+//     post = await post.save({ session });
+//     await session.commitTransaction();
+//     session.endSession();
+//   } catch (err) {
+//     return console.log(err);
+//   }
+
+//   if (!post) {
+//     return res.status(500).json({ message: "Unexpected Error Occurred" });
+//   }
+
+//   return res.status(201).json({ post });
+// };
+
 export const addPost = async (req, res, next) => {
   const { subLocation, description, location, date, user, locationUrl } =
     req.body;
-  const imagePath = req.file ? req.file.path : "";
-  const imageUrl = imagePath
-    ? `${baseUrl}/uploads/${path.basename(imagePath)}`
-    : "";
+  const imageFiles = req.files; // assuming you are using multer or a similar middleware
+
+  // Generate image URLs
+  const imageUrls = imageFiles.map(
+    (file) => `${baseUrl}/uploads/${path.basename(file.path)}`
+  );
 
   let post;
   try {
@@ -55,10 +98,8 @@ export const addPost = async (req, res, next) => {
       location,
       date: new Date(date),
       user,
-      image: {
-        url: imageUrl,
-      },
-      locationUrl, // Add this line
+      images: imageUrls.map((url) => ({ url })), // Transform image URLs into the required format
+      locationUrl,
     });
 
     const session = await mongoose.startSession();

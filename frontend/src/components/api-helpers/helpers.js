@@ -72,20 +72,40 @@ export const fetchPostById = async (postId) => {
 //   }
 // };
 
+// export const addPost = async (data) => {
+//   const res = await axios
+//     .post("/post/addPost", data, {
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//       },
+//     })
+//     .catch((err) => console.log(err));
+
+//   if (res.status !== 201) {
+//     throw new Error("Error Occurred");
+//   }
+
+//   return res.data;
+// };
+
 export const addPost = async (data) => {
-  const res = await axios
-    .post("/post/addPost", data, {
+  try {
+    const response = await axios.post("/post/addPost", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    })
-    .catch((err) => console.log(err));
+    });
 
-  if (res.status !== 201) {
-    throw new Error("Error Occurred");
+    // Check if response status is 201 (Created)
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error occurred while adding post:", error);
+    throw new Error("Failed to add post. Please try again later.");
   }
-
-  return res.data;
 };
 
 export const toggleFavorite = async (postId) => {
@@ -165,6 +185,39 @@ export const updatePost = async (id, data, imageFile = null) => {
     throw error;
   }
 };
+
+// export const updatePost = async (id, data, imageFile = null) => {
+//   try {
+//     // Create a FormData object to handle the image and other data
+//     const formData = new FormData();
+//     formData.append("location", data.location);
+//     formData.append("subLocation", data.subLocation);
+//     formData.append("description", data.description);
+//     formData.append("locationUrl", data.locationUrl || "");
+
+//     // Append the image file if it exists
+//     if (imageFile) {
+//       formData.append("image", imageFile, imageFile.name);
+//     }
+
+//     // Send the PUT request with FormData
+//     const response = await axios.put(`/post/${id}`, formData, {
+//       headers: {
+//         "Content-Type": "multipart/form-data", // Ensure the correct content type for FormData
+//       },
+//     });
+
+//     // Check response status and extract data
+//     if (response.status !== 200) {
+//       throw new Error("Failed to update the post");
+//     }
+
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error updating post:", error.message);
+//     throw error;
+//   }
+// };
 
 export const deletePostById = async (id) => {
   try {

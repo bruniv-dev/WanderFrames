@@ -72,6 +72,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store";
 import "./Header.css";
+import { Link } from "react-router-dom";
 
 const Header = ({
   classNameheader,
@@ -136,7 +137,9 @@ const Header = ({
 
   return (
     <div className={`header ${classNameheader}`}>
-      <h2 className={`logo ${classNamelogo}`}>BRUNIV</h2>
+      <Link to="/" className="logo-nav">
+        <h3 className={`logo ${classNamelogo}`}>BRUNIV</h3>
+      </Link>
       <nav className={`nav ${classNamenav}`}>
         {navLinks.map((link) => (
           <NavLink

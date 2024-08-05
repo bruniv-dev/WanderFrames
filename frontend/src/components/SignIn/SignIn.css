@@ -7,15 +7,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem;
-  height: 2rem;
   position: relative;
   z-index: 1;
   background: transparent;
 }
 
-.login-nav {
-  display: flex;
+.login-logo {
+  font-size: 28px;
+}
+
+.login-header .login-nav {
+  display: none;
   justify-content: space-between;
   gap: 1rem;
   margin: 1rem 0.5rem;
@@ -45,8 +47,8 @@
 
 .auth-container {
   position: relative;
-  width: 900px; /* Increased width */
-  height: 580px; /* Increased height */
+  width: 950px; /* Increased width */
+  height: 600px; /* Increased height */
   background: #fff;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   overflow: hidden;
@@ -102,13 +104,13 @@
 .auth-form h2 {
   color: #3f3f3f;
   font-weight: 700;
-  margin-bottom: 20px;
-  font-size: 28px;
+  margin-bottom: 10px;
+  font-size: 24px;
 }
 
 .form-group {
   width: 100%; /* Increased width */
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   display: flex;
   flex-direction: column;
 }

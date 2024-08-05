@@ -5,6 +5,8 @@ import Post from "../models/Post.js";
 import path from "path";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
+import { uploadDir } from "../app.js";
+import fs from "fs";
 
 //GET ALL USERS
 export const getAllUsers = async (req, res) => {
@@ -218,6 +220,38 @@ export const updateUserProfile = async (req, res) => {
   }
 };
 
+// export const updateUserProfile = async (req, res) => {
+//   const { userId } = req.params;
+//   const { bio, username, firstName, lastName } = req.body;
+//   const profileImage = req.file ? req.file.path : "";
+//   const profileImageUrl = profileImage
+//     ? `${baseUrl}/uploads/${path.basename(profileImage)}`
+//     : "";
+
+//   try {
+//     let user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     if (bio) user.bio = bio;
+//     if (username) user.username = username;
+//     if (firstName) user.firstName = firstName;
+//     if (lastName) user.lastName = lastName;
+//     // if (profileImage) user.profileImage = profileImage;
+//     if (profileImage) user.profileImage = profileImageUrl;
+
+//     // if (profileImage) {
+//     //   user.profileImage = profileImage.replace(/\\/g, "/"); // Normalize path
+//     // }
+//     await user.save();
+
+//     res.json({ message: "Profile updated successfully", user });
+//   } catch (error) {
+//     console.error("Error updating user profile:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 export const signup = async (req, res) => {
   const {
     firstName,

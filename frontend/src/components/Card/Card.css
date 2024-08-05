@@ -192,14 +192,14 @@
   color: #fff;
 } */
 
-.card-container {
+/* .card-container {
   position: relative;
   width: 100%;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin-bottom: 3rem;
-  height: 400px; /* Fixed card height */
+  height: 400px; 
   display: flex;
   flex-direction: column;
 }
@@ -212,7 +212,7 @@
 }
 
 .profile-image-card {
-  width: 50px; /* Adjusted profile image size */
+  width: 50px; 
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
@@ -241,7 +241,7 @@
 
 .main-image {
   width: 100%;
-  height: 180px; /* Fixed image height */
+  height: 180px; 
   object-fit: cover;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -249,7 +249,7 @@
 
 .card-content {
   padding: 10px;
-  flex: 1; /* Allows the content area to take up remaining space */
+  flex: 1; 
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -361,7 +361,6 @@
   fill: #fff;
 }
 
-/* Popup Backdrop */
 .popup-backdrop {
   position: fixed;
   top: 0;
@@ -375,7 +374,7 @@
   z-index: 1000;
 }
 
-/* Popup Content */
+
 .popup-content {
   background: #fff;
   padding: 20px;
@@ -384,7 +383,6 @@
   text-align: center;
 }
 
-/* Button Styles */
 .popup-content button {
   margin: 5px;
   padding: 10px 20px;
@@ -393,4 +391,134 @@
   cursor: pointer;
   background-color: #007bff;
   color: #fff;
+} */
+/* Card.css */
+
+/* Style for the card container */
+.card-container {
+  position: relative;
+  overflow: hidden; /* Ensure content doesn't overflow */
+  border-radius: 8px; /* Optional: Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow for better visual appeal */
+  background-color: #fff; /* Optional: Background color */
+  height: 450px;
+}
+
+/* Style for the image slider */
+.image-slider {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Set a fixed height for the slider */
+  overflow: hidden; /* Hide overflow to keep images within the container */
+}
+
+/* Style for the images within the slider */
+.slider-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the container while maintaining aspect ratio */
+  display: block; /* Ensure images are displayed as block elements */
+}
+
+/* Other styles */
+.card-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f5f5f5; /* Optional: Background color */
+}
+
+.profile-image-card {
+  width: 50px; /* Set a fixed size for profile image */
+  height: 50px;
+  border-radius: 50%; /* Circle profile image */
+  object-fit: cover; /* Ensure profile image covers the container */
+}
+
+.user-info {
+  margin-left: 10px;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.date {
+  color: #888;
+}
+
+/* Modal styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 800px;
+}
+
+.modal-slider {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Set a fixed height for the modal slider */
+}
+
+/* Style for the images within the modal slider */
+.modal-slider-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the container while maintaining aspect ratio */
+  display: block; /* Ensure images are displayed as block elements */
+}
+
+/* Close button styles */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Container for the description */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* Style for the description text */
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Show only 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+
+/* Style for the read more button */
+.read-more {
+  color: #007bff; /* Link color */
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* Style for the full description */
+.full-description {
+  display: none; /* Hide by default */
 }
