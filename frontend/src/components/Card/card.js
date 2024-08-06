@@ -239,6 +239,8 @@
 
 // export default Card;
 
+//
+
 import React, { useState, useEffect } from "react";
 import { MdLocationOn, MdDeleteForever, MdEdit } from "react-icons/md";
 import {
@@ -360,7 +362,7 @@ const Card = ({
 
   const handleEditClick = (e) => {
     e.stopPropagation();
-    navigate(`/editPost/${_id}`);
+    navigate("/editPost", { state: { postId: _id } }); // Navigate using state
   };
 
   const handleUsernameClick = (e) => {
@@ -459,13 +461,13 @@ const Card = ({
         )}
 
         {isProfile && loggedInUserId === userId && (
-          <MdDeleteForever
-            className="delete-button"
-            onClick={handleDeleteClick}
-          />
-        )}
-        {isProfile && loggedInUserId === userId && (
-          <MdEdit className="edit-button" onClick={handleEditClick} />
+          <>
+            <MdDeleteForever
+              className="delete-button"
+              onClick={handleDeleteClick}
+            />
+            <MdEdit className="edit-button" onClick={handleEditClick} />
+          </>
         )}
         {onAdminDelete && (
           <button className="delete-button" onClick={handleAdminDeleteClick}>
@@ -475,8 +477,9 @@ const Card = ({
       </div>
       <div className="card-content">
         <p className="location">Location: {location}</p>
-        <p className="sub-location">State, Country: {subLocation}</p>
+        <p className="sub-location">State-Country: {subLocation}</p>
         <p className={`description ${isExpanded ? "full-description" : ""}`}>
+          Description:
           {description}
         </p>
         <button className="read-more" onClick={handleToggleDescription}>

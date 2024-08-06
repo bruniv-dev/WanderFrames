@@ -26,7 +26,7 @@ const App = () => {
         <Route path="/inspirations" element={<Inspirations />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/loginSignup" element={<SignIn />} />
-        <Route path="/editPost/:postId" element={<EditPost />} />
+        <Route path="/editPost" element={<EditPost />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/post-actions" element={<PostActions />} />
