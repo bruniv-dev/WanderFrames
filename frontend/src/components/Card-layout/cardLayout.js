@@ -478,6 +478,8 @@ const CardLayout = ({
   onFavoriteToggle,
   onDelete,
   onAdminDelete,
+  isProfile,
+  isAdminContext,
 }) => {
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -535,6 +537,8 @@ const CardLayout = ({
           onDelete={onDelete}
           onAdminDelete={onAdminDelete ? () => onAdminDelete(card._id) : null}
           onCardClick={() => openModal(card)}
+          isProfile={isProfile}
+          isAdminContext={isAdminContext}
         />
       ))}
 

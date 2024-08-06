@@ -177,7 +177,6 @@ import "./Favorites.css";
 import CardLayout from "../Card-layout/cardLayout";
 import Header from "../Header/header";
 import { fetchFavorites, fetchUserDetailsById } from "../api-helpers/helpers"; // Import the fetch function
-import Search from "../Search/Search"; // Import the search component
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -203,7 +202,9 @@ const Favorites = () => {
           }))
           .catch(() => ({
             ...favorite,
-            userName: "Unknown", // Default value on error
+            userName: "Unknown",
+            firstName: "Unknown",
+            lastName: "Unknown", // Default value on error
           }))
       );
 
@@ -230,13 +231,15 @@ const Favorites = () => {
       const lastName = favorite.lastName || "";
       const location = favorite.location || "";
       const subLocation = favorite.subLocation || "";
+      const fullName = `${favorite.firstName} ${favorite.lastName}` || "";
 
       return (
         userName.toLowerCase().includes(lowercasedTerm) ||
         lastName.toLowerCase().includes(lowercasedTerm) ||
         firstName.toLowerCase().includes(lowercasedTerm) ||
         location.toLowerCase().includes(lowercasedTerm) ||
-        subLocation.toLowerCase().includes(lowercasedTerm)
+        subLocation.toLowerCase().includes(lowercasedTerm) ||
+        fullName.toLowerCase().includes(lowercasedTerm)
       );
     });
     setFilteredFavorites(filtered);

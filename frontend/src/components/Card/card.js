@@ -266,6 +266,8 @@ const Card = ({
   isAdmin,
   onAdminDelete,
   onCardClick,
+  isProfile,
+  isAdminContext,
 }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [userDetails, setUserDetails] = useState({});
@@ -363,7 +365,7 @@ const Card = ({
 
   const handleUsernameClick = (e) => {
     e.stopPropagation();
-    navigate(`/userProfile/${userId}`);
+    navigate("/userProfile", { state: { userId } });
   };
 
   const handleToggleDescription = () => {
@@ -434,6 +436,12 @@ const Card = ({
             {`${userDetails.firstName} ${userDetails.lastName}` ||
               "Unknown User"}
           </p>
+          <p
+            className="role"
+            style={{ color: userDetails.isAdmin ? "red" : "black" }}
+          >
+            Role: {userDetails.isAdmin ? "Admin" : "User"}
+          </p>
           <p className="date">{formatDate(date)}</p>
         </div>
         {locationUrl && (
@@ -441,19 +449,22 @@ const Card = ({
             <MdLocationOn className="location-button" />
           </a>
         )}
-        <button
-          className={`add-to-favorites ${isFavorite ? "favorite" : ""}`}
-          onClick={handleFavoriteClick}
-        >
-          {isFavorite ? "-" : "+"}
-        </button>
-        {(loggedInUserId === userId || isAdmin) && (
+        {!isAdminContext && (
+          <button
+            className={`add-to-favorites ${isFavorite ? "favorite" : ""}`}
+            onClick={handleFavoriteClick}
+          >
+            {isFavorite ? "-" : "+"}
+          </button>
+        )}
+
+        {isProfile && loggedInUserId === userId && (
           <MdDeleteForever
             className="delete-button"
             onClick={handleDeleteClick}
           />
         )}
-        {loggedInUserId === userId && (
+        {isProfile && loggedInUserId === userId && (
           <MdEdit className="edit-button" onClick={handleEditClick} />
         )}
         {onAdminDelete && (

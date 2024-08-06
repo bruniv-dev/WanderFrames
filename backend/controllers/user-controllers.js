@@ -19,6 +19,7 @@ export const signup = async (req, res) => {
     securityQuestion,
     securityAnswer,
     isAdmin = false,
+    role = "user",
   } = req.body;
 
   try {
@@ -62,6 +63,7 @@ export const signup = async (req, res) => {
       securityQuestion,
       securityAnswer,
       isAdmin,
+      role,
     });
 
     await user.save();
@@ -85,6 +87,49 @@ export const signup = async (req, res) => {
   }
 };
 
+// export const login = async (req, res) => {
+//   const { identifier, password } = req.body; // Handle both username and email
+
+//   try {
+//     // Find the user by username or email
+//     const user = await User.findOne({
+//       $or: [{ email: identifier }, { username: identifier }],
+//     });
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ message: "No user found with the given username or email." });
+//     }
+
+//     // Compare password
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "Incorrect password" });
+//     }
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       { userId: user._id, isAdmin: user.isAdmin },
+//       process.env.JWT_SECRET,
+//       { expiresIn: "1h" }
+//     );
+
+//     // Replace existing token with the new one
+//     user.token = token; // Keep only the latest token
+//     await user.save();
+
+//     // Respond with user data and token
+//     res.status(200).json({
+//       token,
+//       userId: user._id,
+//       isAdmin: user.isAdmin,
+//       message: "Login successful",
+//     });
+//   } catch (error) {
+//     console.error("Error during login:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 export const login = async (req, res) => {
   const { identifier, password } = req.body; // Renamed to `identifier` to handle both username and email
 

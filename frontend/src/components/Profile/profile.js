@@ -1097,7 +1097,11 @@ const Profile = () => {
         <div className="posts-section">
           <h2>Your Posts</h2>
           {posts.length > 0 ? (
-            <CardLayout cardsData={posts} onDelete={handlePostDelete} />
+            <CardLayout
+              cardsData={posts}
+              onDelete={handlePostDelete}
+              isProfile={true}
+            />
           ) : (
             <p>No posts available</p>
           )}
