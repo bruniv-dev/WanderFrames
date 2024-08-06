@@ -7,7 +7,123 @@ import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { uploadDir } from "../app.js";
 import fs from "fs";
+import jwt from "jsonwebtoken";
 
+export const signup = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    username,
+    email,
+    password,
+    securityQuestion,
+    securityAnswer,
+    isAdmin = false,
+  } = req.body;
+
+  try {
+    // Validate all required fields
+    if (
+      !firstName ||
+      !lastName ||
+      !username ||
+      !email ||
+      !password ||
+      !securityQuestion ||
+      !securityAnswer
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check if username or email already taken
+    const [existingUserByUsername, existingUserByEmail] = await Promise.all([
+      User.findOne({ username }),
+      User.findOne({ email }),
+    ]);
+
+    if (existingUserByUsername) {
+      return res.status(400).json({ message: "Username already taken" });
+    }
+
+    if (existingUserByEmail) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    const user = new User({
+      firstName,
+      lastName,
+      username,
+      email,
+      password: hashedPassword,
+      securityQuestion,
+      securityAnswer,
+      isAdmin,
+    });
+
+    await user.save();
+
+    // Create JWT token
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.status(201).json({
+      message: "User created successfully",
+      token,
+      userId: user._id,
+      isAdmin: user.isAdmin,
+    });
+  } catch (err) {
+    console.error("Error in signup controller:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const login = async (req, res) => {
+  const { identifier, password } = req.body; // Renamed to `identifier` to handle both username and email
+
+  try {
+    // Find the user by username or email
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "No user found with the given username or email." });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // Respond with user data and token
+    res.status(200).json({
+      token,
+      userId: user._id,
+      isAdmin: user.isAdmin,
+      message: "Login successful",
+    });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 //GET ALL USERS
 export const getAllUsers = async (req, res) => {
   let users;
@@ -252,99 +368,99 @@ export const updateUserProfile = async (req, res) => {
 //     res.status(500).json({ message: "Server error" });
 //   }
 // };
-export const signup = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    username,
-    email,
-    password,
-    securityQuestion,
-    securityAnswer,
-    isAdmin = false,
-  } = req.body;
+// export const signup = async (req, res) => {
+//   const {
+//     firstName,
+//     lastName,
+//     username,
+//     email,
+//     password,
+//     securityQuestion,
+//     securityAnswer,
+//     isAdmin = false,
+//   } = req.body;
 
-  try {
-    // Validate all required fields
-    if (
-      !firstName ||
-      !lastName ||
-      !username ||
-      !email ||
-      !password ||
-      !securityQuestion ||
-      !securityAnswer
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+//   try {
+//     // Validate all required fields
+//     if (
+//       !firstName ||
+//       !lastName ||
+//       !username ||
+//       !email ||
+//       !password ||
+//       !securityQuestion ||
+//       !securityAnswer
+//     ) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
 
-    // Check if username is already taken
-    const existingUserByUsername = await User.findOne({ username });
-    if (existingUserByUsername) {
-      return res.status(400).json({ message: "Username already taken" });
-    }
+//     // Check if username is already taken
+//     const existingUserByUsername = await User.findOne({ username });
+//     if (existingUserByUsername) {
+//       return res.status(400).json({ message: "Username already taken" });
+//     }
 
-    // Check if email is already taken
-    const existingUserByEmail = await User.findOne({ email });
-    if (existingUserByEmail) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+//     // Check if email is already taken
+//     const existingUserByEmail = await User.findOne({ email });
+//     if (existingUserByEmail) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+//     // Hash the password
+//     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
-    const user = new User({
-      firstName,
-      lastName,
-      username,
-      email,
-      password: hashedPassword,
-      securityQuestion,
-      securityAnswer,
-      isAdmin,
-    });
+//     // Create a new user
+//     const user = new User({
+//       firstName,
+//       lastName,
+//       username,
+//       email,
+//       password: hashedPassword,
+//       securityQuestion,
+//       securityAnswer,
+//       isAdmin,
+//     });
 
-    await user.save();
+//     await user.save();
 
-    return res.status(201).json({ message: "User created successfully" });
-  } catch (err) {
-    console.error("Error in signup controller:", err);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
+//     return res.status(201).json({ message: "User created successfully" });
+//   } catch (err) {
+//     console.error("Error in signup controller:", err);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
-export const login = async (req, res) => {
-  const { identifier, password } = req.body; // Renamed to `identifier` to handle both username and email
+// export const login = async (req, res) => {
+//   const { identifier, password } = req.body; // Renamed to `identifier` to handle both username and email
 
-  try {
-    // Find the user by username or email
-    const user = await User.findOne({
-      $or: [{ email: identifier }, { username: identifier }],
-    });
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: "No user found with the given username or email." });
-    }
+//   try {
+//     // Find the user by username or email
+//     const user = await User.findOne({
+//       $or: [{ email: identifier }, { username: identifier }],
+//     });
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ message: "No user found with the given username or email." });
+//     }
 
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Incorrect password" });
-    }
+//     // Compare password
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "Incorrect password" });
+//     }
 
-    // Respond with user data
-    res.status(200).json({
-      userId: user._id,
-      isAdmin: user.isAdmin,
-      message: "Login successful",
-    });
-  } catch (error) {
-    console.error("Error during login:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+//     // Respond with user data
+//     res.status(200).json({
+//       userId: user._id,
+//       isAdmin: user.isAdmin,
+//       message: "Login successful",
+//     });
+//   } catch (error) {
+//     console.error("Error during login:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
 // Update user isADMIB
 export const updateUserIsAdmin = async (req, res) => {
